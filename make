@@ -3,7 +3,7 @@
 cd `dirname $0` || exit
 
 # generates a general.pot
-../../../../../disabled/modules/potx/potx-cli.php
+../../../disabled/modules/potx/potx-cli.php
 mv general.pot translations/modules-iframe.pot
 
 cd translations/ || exit
