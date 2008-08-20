@@ -1,0 +1,711 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Defines simple iframe field types.
+ *  based on the cck-module "iframe" by quicksketch
+ */
+
+define('iframe_EXTERNAL', 'external');
+define('iframe_INTERNAL', 'internal');
+define('iframe_FRONT', 'front');
+define('iframe_EMAIL', 'email');
+define('iframe_DOMAINS', 'aero|arpa|biz|com|cat|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|mobi|local');
+
+/**
+ * Implementation of hook_field_info().
+ */
+function iframe_field_info() {
+  return array(
+    'iframe' => array(
+      'label' => t('IFrame'),
+      'description' => t('Store a title, src, and attributes in the database to assemble an iframe.'),
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_field_settings().
+ */
+function iframe_field_settings($op, $field) {
+  switch ($op) {
+    case 'form':
+      $form = array(
+        '#theme' => 'iframe_field_settings',
+      );
+
+      $form['url'] = array(
+        '#type' => 'checkbox',
+        '#title' => t('Optional url'),
+        '#default_value' => $field['url'],
+        '#return_value' => 'optional',
+        '#description' => t('If checked, the url field is optional. If the url is ommitted, nothing will be displayed.'),
+      );
+
+      $title_options = array(
+        'optional' => t('Optional Title'),
+        'required' => t('Required Title'),
+        'value' => t('Static Title: '),
+        'none' => t('No Title'),
+      );
+
+      $form['title'] = array(
+        '#type' => 'radios',
+        '#title' => t('IFrame Title'),
+        '#default_value' => isset($field['title']) ? $field['title'] : 'optional',
+        '#options' => $title_options,
+        '#description' => t('If the iframe title is optional or required, a field will be displayed to the end user. If the iframe title is static, the iframe will always use the same title. If <a href="http://drupal.org/project/token">token module</a> is installed, the static title value may use any other node field as its value. Static and token-based titles may include most inline XHTML tags such as <em>strong</em>, <em>em</em>, <em>img</em>, <em>span</em>, etc.'),
+      );
+
+      $form['title_value'] = array(
+        '#type' => 'textfield',
+        '#default_value' => $field['title_value'],
+        '#size' => '46',
+      );
+
+      // Add token module replacements if available
+      if (module_exists('token')) {
+        $form['tokens'] = array(
+          '#type' => 'fieldset',
+          '#collapsible' => TRUE,
+          '#collapsed' => TRUE,
+          '#title' => t('Placeholder tokens'),
+          '#description' => t("The following placeholder tokens can be used in both paths and titles. When used in a path or title, they will be replaced with the appropriate values."),
+        );
+        $form['tokens']['help'] = array(
+          '#value' => theme('token_help', 'node'),
+        );
+
+        $form['enable_tokens'] = array(
+          '#type' => 'checkbox',
+          '#title' => t('Allow user-entered tokens'),
+          '#default_value' => isset($field['enable_tokens']) ? $field['enable_tokens'] : 1,
+          '#description' => t('Checking will allow users to enter tokens in URLs and Titles on the node edit form. This does not affect the field settings on this page.'),
+        );
+      }
+
+      $form['display'] = array(
+        '#tree' => true,
+      );
+
+      $target_options = array(
+        'default' => t('Default (no target attribute)'),
+        '_top' => t('Open search in window root'),
+        '_blank' => t('Open search in new window'),
+        'user' => t('Allow the user to choose'),
+      );
+      $form['attributes'] = array(
+        '#tree' => true,
+      );
+      $form['attributes']['target'] = array(
+        '#type' => 'radios',
+        '#title' => t('IFrame Target'),
+        '#default_value' => empty($field['attributes']['target']) ? 'default' : $field['attributes']['target'],
+        '#options' => $target_options,
+      );
+      $form['attributes']['class'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Additional CSS Class'),
+        '#description' => t('When output, this iframe will have this class attribute. Multiple classes should be separated by spaces.'),
+        '#default_value' => empty($field['attributes']['class']) ? '' : $field['attributes']['class'],
+      );
+      $form['attributes']['width'] = array(
+        '#type' => 'textfield',
+        '#title' => t('width of the iframe'),
+        '#description' => t('iframes need fix width and height, only numbers are allowed.'),
+        '#default_value' => empty($field['attributes']['width']) ? '100%' : $field['attributes']['width'],
+        '#maxlength' => 4,
+        '#size' => 4,
+      );
+      $form['attributes']['height'] = array(
+        '#type' => 'textfield',
+        '#title' => t('height of the iframe'),
+        '#description' => t('iframes need fix width and height, only numbers are allowed.'),
+        '#default_value' => empty($field['attributes']['height']) ? '1000' : $field['attributes']['height'],
+        '#maxlength' => 4,
+        '#size' => 4,
+      );
+      return $form;
+
+    case 'validate':
+      if (empty($field['attributes']['width']) || (int)$field['attributes']['width']<1) {
+        form_set_error('width_value', t('A default width and height must be provided.'));
+      }
+      if (empty($field['attributes']['height']) || (int)$field['attributes']['height']<1) {
+        form_set_error('height_value', t('A default width and height must be provided.'));
+      }
+      break;
+
+    case 'save':
+      return array('attributes', 'display', 'url', 'title', 'title_value', 'target', 'enable_tokens');
+
+    case 'database columns':
+      return array(
+        'url' => array('type' => 'varchar', 'length' => 255, 'not null' => FALSE, 'sortable' => TRUE),
+        'title' => array('type' => 'varchar', 'length' => 255, 'not null' => FALSE, 'sortable' => TRUE),
+        'target' => array('type' => 'varchar', 'length' => 255, 'not null' => FALSE, 'sortable' => TRUE),
+        'attributes' => array('type' => 'text', 'size' => 'medium', 'not null' => FALSE),
+      );
+
+    case 'views data':
+      return iframe_views_content_field_data($field);
+  }
+}
+
+/**
+ * Theme the settings form for the iframe field.
+ */
+function theme_iframe_field_settings($form) {
+  $title_value = drupal_render($form['title_value']);
+  $title_checkbox = drupal_render($form['title']['value']);
+
+  // Set Static Title radio option to include the title_value textfield.
+  $form['title']['value'] = array('#value' => '<div class="container-inline">'. $title_checkbox . $title_value .'</div>');
+
+  // Reprint the title radio options with the included textfield.
+  return drupal_render($form);
+}
+
+/**
+ * Implementation of hook_content_is_empty().
+ */
+function iframe_content_is_empty($item, $field) {
+  if (empty($item['url'])) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Implementation of hook_field().
+ */
+function iframe_field($op, &$node, $field, &$items, $teaser, $page) {
+  switch ($op) {
+    case 'load':
+      foreach ($items as $delta => $item) {
+        _iframe_load($items[$delta], $delta);
+      }
+      break;
+
+    case 'validate':
+      $optional_field_found = FALSE;
+      foreach($items as $delta => $value) {
+        _iframe_validate($items[$delta],$delta, $field, $node, $optional_field_found);
+      }
+
+      if ($field['url'] == 'optional' && $field['title'] == 'optional' && $field['required'] && !$optional_field_found) {
+        form_set_error($field['field_name'] .'][0][title', t('At least one title or URL must be entered.'));
+      }
+      break;
+
+    case 'presave':
+      foreach($items as $delta => $value) {
+        _iframe_process($items[$delta], $delta, $field, $node);
+      }
+      break;
+
+    case 'sanitize':
+      foreach ($items as $delta => $value) {
+        _iframe_sanitize($items[$delta], $delta, $field, $node);
+      }
+      break;
+  }
+}
+
+/**
+ * Implementation of hook_widget_info().
+ */
+function iframe_widget_info() {
+  return array(
+    'iframe' => array(
+      'label' => 'Text Fields for Title and iframe-url',
+      'field types' => array('iframe'),
+      'multiple values' => CONTENT_HANDLE_CORE,
+    ),
+  );
+}
+
+/**
+ * Implementation of hook_widget().
+ */
+function iframe_widget(&$form, &$form_state, $field, $items, $delta = 0) {
+  $element = array(
+    '#type' => $field['widget']['type'],
+    '#default_value' => isset($items[$delta]) ? $items[$delta] : '',
+    '#title' => $field['widget']['label'],
+    '#weight' => $field['widget']['weight'],
+    '#description' => $field['widget']['description'],
+    '#required' => $field['required'],
+    '#field' => $field,
+  );
+  return $element;
+}
+
+function _iframe_load(&$item, $delta = 0) {
+  // Unserialize the attributes array.
+  $item['attributes'] = unserialize($item['attributes']);
+}
+
+function _iframe_process(&$item, $delta = 0, $field, $node) {
+  // Remove the target attribute if not selected.
+  if (!$item['attributes']['target'] || $item['attributes']['target'] == "default") {
+    unset($item['attributes']['target']);
+  }
+  // Trim whitespace from url.
+  $item['url'] = trim($item['url']);
+  // numbers should be numbers
+  $item['attributes']['width'] = iframe_validate_size($item['attributes']['width'], $field['widget']['default_value'][$delta]['width']);
+  $item['attributes']['height'] = iframe_validate_size($item['attributes']['height'], $field['widget']['default_value'][$delta]['height']);
+
+  // Serialize the attributes array.
+  $item['attributes'] = serialize($item['attributes']);
+
+  // Don't save an invalid default value (e.g. 'http://').
+  if ((isset($field['widget']['default_value'][$delta]['url']) && $item['url'] == $field['widget']['default_value'][$delta]['url']) && is_object($node)) {
+    if (!iframe_validate_url($item['url'])) {
+      unset($item['url']);
+    }
+  }
+}
+
+function _iframe_validate(&$item, $delta, $field, $node, &$optional_field_found) {
+  if ($item['url'] && !(isset($field['widget']['default_value'][$delta]['url']) && $item['url'] == $field['widget']['default_value'][$delta]['url'] && !$field['required'])) {
+    // Validate the iframe.
+    if (iframe_validate_url(trim($item['url'])) == FALSE) {
+      form_set_error($field['field_name'] .']['. $delta. '][url', t('Not a valid url-iframe.'));
+    }
+    // Require a title for the iframe if necessary.
+    if ($field['title'] == 'required' && strlen(trim($item['title'])) == 0) {
+      form_set_error($field['field_name'] .']['. $delta. '][title', t('Titles are required for all iframes.'));
+    }
+  }
+  // Require a iframe if we have a title.
+  if ($field['url'] !== 'optional' && strlen($item['title']) > 0 && strlen(trim($item['url'])) == 0) {
+    form_set_error($field['field_name'] .']['. $delta. '][url', t('You cannot enter a title without a iframe url.'));
+  }
+  // In a totally bizzaro case, where URLs and titles are optional but the field is required, ensure there is at least one iframe.
+  if ($field['url'] == 'optional' && $field['title'] == 'optional' && (strlen(trim($item['url'])) != 0 || strlen(trim($item['title'])) != 0)) {
+    $optional_field_found = TRUE;
+  }
+}
+
+/**
+ * Cleanup user-entered values for a iframe field according to field settings.
+ *
+ * @param $item
+ *   A single iframe item, usually containing url, title, and attributes.
+ * @param $delta
+ *   The delta value if this field is one of multiple fields.
+ * @param $field
+ *   The CCK field definition.
+ * @param $node
+ *   The node containing this iframe.
+ */
+function _iframe_sanitize(&$item, $delta, &$field, &$node) {
+  // Don't try to process empty iframes.
+  if (empty($item['url']) && empty($item['title'])) {
+    return;
+  }
+
+  // Replace URL tokens.
+  if (module_exists('token') && $field['enable_tokens']) {
+    $token_node = node_load($node->nid); // Necessary for nodes in views.
+    $item['url'] = token_replace($item['url'], 'node', $token_node);
+  }
+
+  $type = iframe_validate_url($item['url']);
+  $url = iframe_cleanup_url($item['url']);
+
+  // Separate out the anchor if any.
+  if (strpos($url, '#') !== FALSE) {
+    $item['fragment'] = substr($url, strpos($url, '#') + 1);
+    $url = substr($url, 0, strpos($url, '#'));
+  }
+  // Separate out the query string if any.
+  if (strpos($url, '?') !== FALSE) {
+    $item['query'] = substr($url, strpos($url, '?') + 1);
+    $url = substr($url, 0, strpos($url, '?'));
+  }
+  // Save the new URL without the anchor or query.
+  $item['url'] = $url;
+
+  // Create a shortened URL for display.
+  $display_url = $type == iframe_EMAIL ? str_replace('mailto:', '', $url) : url($url, array('query' => isset($item['query']) ? $item['query'] : NULL, 'fragment' => isset($item['fragment']) ? $item['fragment'] : NULL, 'absolute' => TRUE));
+  $item['display_url'] = $display_url;
+
+  // Use the title defined at the field level.
+  if ($field['title'] == 'value' && strlen(trim($field['title_value']))) {
+    $title = $field['title_value'];
+  }
+  // Use the title defined by the user at the widget level.
+  else {
+    $title = $item['title'];
+  }
+  // Replace tokens.
+  if (module_exists('token') && ($field['title'] == 'value' || $field['enable_tokens'])) {
+    $token_node = node_load($node->nid); // Necessary for nodes in views.
+    $title = filter_xss(token_replace($title, 'node', $token_node), array('b', 'br', 'code', 'em', 'i', 'img', 'span', 'strong', 'sub', 'sup', 'tt', 'u'));
+    $item['html'] = TRUE;
+  }
+  $item['display_title'] = empty($title) ? '' : $title;
+
+  // Add attributes defined at the widget level
+  $attributes = array();
+  if (!empty($item['attributes']) && is_array($item['attributes'])) {
+    foreach($item['attributes'] as $attribute => $attbvalue) {
+      if (isset($item['attributes'][$attribute]) && $field['attributes'][$attribute] == 'user') {
+        $attributes[$attribute] = $attbvalue;
+       }
+     }
+   }
+  // Add attributes defined at the field level
+  if (is_array($field['attributes'])) {
+    foreach($field['attributes'] as $attribute => $attbvalue) {
+      if (!empty($attbvalue) && $attbvalue != 'default' && $attbvalue != 'user') {
+        $attributes[$attribute] = $attbvalue;
+      }
+    }
+  }
+  // Remove the rel=nofollow for internal iframes.
+  if ($type != iframe_EXTERNAL && isset($attributes['rel']) && strpos($attributes['rel'], 'nofollow') !== FALSE) {
+    $attributes['rel'] = str_replace('nofollow', '', $attributes['rel']);
+    if (empty($attributes['rel'])) {
+      unset($attributes['rel']);
+    }
+  }
+  $item['attributes'] = $attributes;
+
+  // Add the widget label.
+  $item['label'] = $field['widget']['label'];
+}
+
+/**
+ * Implementation of hook_theme().
+ */
+function iframe_theme() {
+  return array(
+    'iframe_field_settings' => array(
+      'arguments' => array('element' => NULL),
+    ),
+    'iframe_formatter_default' => array(
+      'arguments' => array('element' => NULL),
+    ),
+    'iframe_formatter_iframeonly' => array(
+      'arguments' => array('element' => NULL),
+    ),
+    'iframe_formatter_asurl' => array(
+      'arguments' => array('element' => NULL),
+    ),
+    'iframe' => array(
+      'arguments' => array('element' => NULL),
+    ),
+  );
+}
+
+/**
+ * FAPI theme for an individual text elements.
+ */
+function theme_iframe($element) {
+  drupal_add_css(drupal_get_path('module', 'iframe') .'/iframe.css');
+
+  // Prefix single value iframe fields with the name of the field.
+  if (empty($element['#field']['multiple'])) {
+    if (isset($element['url']) && isset($element['title'])) {
+      $element['url']['#title'] = $element['#title'] .' '. $element['url']['#title'];
+      $element['title']['#title'] = $element['#title'] .' '. $element['title']['#title'];
+    }
+    elseif($element['url']) {
+      $element['url']['#title'] = $element['#title'];
+    }
+  }
+
+  $output = '';
+  $output .= '<div class="iframe-field-subrow clear-block">';
+
+  if (isset($element['title'])) {
+    $output .= '<div class="iframe-field-title iframe-field-column">' . theme('textfield', $element['title']) . '</div>';
+  }
+
+  $output .= '<div class="iframe-field-url' . (isset($element['title']) ? ' iframe-field-column' : '') . '">' . theme('textfield', $element['url']) . '</div>';
+
+  $output .= '<div>'.t('Width and Height of the IFrame').'</div>';
+  $output .= '<div class="iframe-field-width iframe-field-column">' . theme('textfield', $element['attributes']['width']) . '</div>';
+  $output .= '<div class="iframe-field-height iframe-field-column">' . theme('textfield', $element['attributes']['height']) . '</div>';
+
+  $output .= '</div>';
+
+  if (!empty($element['attributes'])) {
+    $output .= '<div class="iframe-attributes">' . theme('form_element', $element['attributes'], $element['attributes']['#value']) . '</div>';
+  }
+  return $output;
+}
+
+/**
+ * Implementation of hook_elements().
+ */
+function iframe_elements() {
+  $elements = array();
+  $elements['iframe'] =  array(
+    '#input' => TRUE,
+    '#columns' => array('url', 'title', 'target'),
+    '#process' => array('iframe_process'),
+  );
+  return $elements;
+}
+
+/**
+ * Process the iframe type element before displaying the field.
+ *
+ * Build the form element. When creating a form using FAPI #process,
+ * note that $element['#value'] is already set.
+ *
+ * The $fields array is in $form['#field_info'][$element['#field_name']].
+ */
+function iframe_process($element, $edit, $form_state, $form) {
+   $field = $form['#field_info'][$element['#field_name']];
+   $delta = $element['#delta'];
+   $element['url'] = array(
+     '#type' => 'textfield',
+     '#maxlength' => '255',
+     '#title' => t('URL'),
+     '#description' => $element['#description'],
+     '#required' => ($delta == 0 && $field['url'] !== 'optional') ? $element['#required'] : FALSE,
+     '#default_value' => isset($element['#value']['url']) ? $element['#value']['url'] : NULL,
+   );
+   if ($field['title'] != 'none' && $field['title'] != 'value') {
+     $element['title'] = array(
+       '#type' => 'textfield',
+       '#maxlength' => '255',
+       '#title' => t('Title'),
+       '#required' => ($delta == 0 && $field['title'] == 'required') ? $field['required'] : FALSE,
+       '#default_value' => isset($element['#value']['title']) ? $element['#value']['title'] : NULL,
+     );
+   }
+   $element['attributes']['width'] = array(
+     '#type' => 'textfield',
+     '#maxlength' => '4',
+     '#size' => '4',
+     '#title' => t('Width'),
+     '#required' => ($delta == 0 && $field['width'] == 'required') ? $field['required'] : FALSE,
+     '#default_value' => !empty($field['attributes']['width'])? $field['attributes']['width'] : NULL,
+   );
+   $element['attributes']['height'] = array(
+     '#type' => 'textfield',
+     '#maxlength' => '4',
+     '#size' => '4',
+     '#title' => t('Height'),
+     '#required' => ($delta == 0 && $field['height'] == 'required') ? $field['required'] : FALSE,
+     '#default_value' => !empty($field['attributes']['height'])? $field['attributes']['height'] : NULL,
+   );
+   if (!empty($field['attributes']['target']) && $field['attributes']['target'] == 'user') {
+     $element['attributes']['target'] = array(
+       '#type' => 'checkbox',
+       '#title' => t('Open URL in a New Window'),
+       '#return_value' => "_blank",
+     );
+   }
+   return $element;
+}
+
+/**
+ * Implementation of hook_field_formatter_info().
+ */
+function iframe_field_formatter_info() {
+  return array(
+    'default' => array(
+      'label' => t('Title, over iframe (default)'),
+      'field types' => array('iframe'),
+      'multiple values' => CONTENT_HANDLE_CORE,
+    ),
+    'iframeonly' => array(
+      'label' => t('IFrame without title'),
+      'field types' => array('iframe'),
+      'multiple values' => CONTENT_HANDLE_CORE,
+    ),
+    'asurl' => array(
+      'label' => t('IFrame url as plain url'),
+      'field types' => array('iframe'),
+      'multiple values' => CONTENT_HANDLE_CORE,
+    ),
+  );
+}
+
+/**
+ * Theme function for 'default' text field formatter.
+ */
+function theme_iframe_formatter_default($element) {
+  // If no url given display nothing.
+  if (empty($element['#item']['url'])) return '';
+  // Display all
+  return iframe_iframe($element['#item']['display_title'], $element['#item']['url'], $element['#item']);
+}
+
+/**
+ * Theme function for 'iframeonly' text field formatter.
+ */
+function theme_iframe_formatter_iframeonly($element) {
+  // If no url given display nothing.
+  if (empty($element['#item']['url'])) return '';
+  // Display all
+  return iframe_iframe('', $element['#item']['url'], $element['#item']);
+}
+
+/**
+ * Theme function for 'asurl' text field formatter.
+ */
+function theme_iframe_formatter_asurl($element) {
+  // If no url given display nothing.
+  if (empty($element['#item']['url'])) return '';
+  // Display all
+  return l($element['#item']['display_title'], $element['#item']['url'], $element['#item']);
+}
+
+function iframe_token_list($type = 'all') {
+  if ($type == 'field' || $type == 'all') {
+    $tokens = array();
+
+    $tokens['iframe']['url'] = t("iframe URL");
+    $tokens['iframe']['title'] = t("iframe title");
+    $tokens['iframe']['view'] = t("Formatted html iframe");
+
+    return $tokens;
+  }
+}
+
+function iframe_token_values($type, $object = NULL) {
+  if ($type == 'field') {
+    $item = $object[0];
+
+    $tokens['url'] = $item['url'];
+    $tokens['title'] = $item['title'];
+    $tokens['view'] = $item['view'];
+
+    return $tokens;
+  }
+}
+
+/**
+ * Forms a valid URL if possible from an entered address.
+ * Trims whitespace and automatically adds an http:// to addresses without a protocol specified
+ *
+ * @param string $url
+ * @param string $protocol The protocol to be prepended to the url if one is not specified
+ */
+function iframe_cleanup_url($url, $protocol = "http") {
+  $url = trim($url);
+  $type = iframe_validate_url($url);
+
+  if ($type == iframe_EXTERNAL) {
+    // Check if there is no protocol specified.
+    $protocol_match = preg_match("/^([a-z0-9][a-z0-9\.\-_]*:\/\/)/i",$url);
+    if (empty($protocol_match)) {
+      // But should there be? Add an automatic http:// if it starts with a domain name.
+      $domain_match = preg_match('/^(([a-z0-9]([a-z0-9\-_]*\.)+)('. iframe_DOMAINS .'|[a-z]{2}))/i',$url);
+      if (!empty($domain_match)) {
+        $url = $protocol."://".$url;
+      }
+    }
+  }
+
+  return $url;
+}
+
+/**
+ * A lenient verification for URLs. Accepts all URLs following RFC 1738 standard
+ * for URL formation and all email addresses following the RFC 2368 standard for
+ * mailto address formation.
+ *
+ * @param string $text
+ * @return mixed Returns boolean FALSE if the URL is not valid. On success, returns an object with
+ * the following attributes: protocol, hostname, ip, and port.
+ */
+function iframe_validate_url($text) {
+
+  $allowed_protocols = variable_get('filter_allowed_protocols', array('http', 'https', 'ftp', 'news', 'nntp', 'telnet', 'mailto', 'irc', 'ssh', 'sftp', 'webcal'));
+
+  $protocol = '((' . implode("|", $allowed_protocols) . '):\/\/)';
+  $authentication = '([a-z0-9]+(:[a-z0-9]+)?@)';
+  $domain = '(([a-z0-9]([a-z0-9\-_\[\]])*)(\.(([a-z0-9\-_\[\]])+\.)*('. iframe_DOMAINS .'|[a-z]{2}))?)';
+  $ipv4 = '([0-9]{1,3}(\.[0-9]{1,3}){3})';
+  $ipv6 = '([0-9a-fA-F]{1,4}(\:[0-9a-fA-F]{1,4}){7})';
+  $port = '(:([0-9]{1,5}))';
+
+  // Pattern specific to eternal iframes.
+  $external_pattern = '/^' . $protocol . '?' . $authentication . '?' . '(' . $domain . '|' . $ipv4 . '|' . $ipv6 . ' |localhost)' . $port . '?';
+
+  // Pattern specific to internal iframes.
+  $internal_pattern = "/^([a-z0-9_\-+\[\]]+)";
+
+  $directories = "(\/[a-z0-9_\-\.~+%=&,$'():;*@\[\]]*)*";
+   // Yes, four backslashes == a single backslash.
+  $query = "(\/?\?([?a-z0-9+_|\-\.\/\\\\%=&,$'():;*@\[\]]*))";
+  $anchor = "(#[a-z0-9_\-\.~+%=&,$'():;*@\[\]]*)";
+
+  // The rest of the path for a standard URL.
+  $end = $directories . '?' . $query . '?' .  $anchor . '?' . '$/i';
+
+  $user = '[a-zA-Z0-9_\-\.\+\^!#\$%&*+\/\=\?\`\|\{\}~\'\[\]]+';
+  $email_pattern = '/^mailto:' . $user . '@' . '(' . $domain . '|' . $ipv4 .'|'. $ipv6 . '|localhost)' . $query . '$/';
+
+  if (strpos($text, '<front>') === 0) {
+    return iframe_FRONT;
+  }
+  if (in_array('mailto', $allowed_protocols) && preg_match($email_pattern, $text)) {
+    return iframe_EMAIL;
+  }
+  if (preg_match($internal_pattern . $end, $text)) {
+    return iframe_INTERNAL;
+  }
+  if (preg_match($external_pattern . $end, $text)) {
+    return iframe_EXTERNAL;
+  }
+
+  return FALSE;
+}
+
+/*
+ * validate size: width and height of an iframe
+*/
+function iframe_validate_size($size,$default="100") {
+  if (is_numeric($size)) return $size;
+  if (preg_match('/^\d+\%$/',$size)) return $size;
+  return $default;
+}
+
+/*
+ * like central function
+ * form the iframe code
+*/
+function iframe_iframe($text, $path, $options = array()) {
+  // Merge in defaults.
+  $options += array(
+      'attributes' => array(),
+      'html' => FALSE,
+    );
+  if (!isset($options['attributes']['width'])) $options['attributes']['width']='100%';
+  if (!isset($options['attributes']['height'])) $options['attributes']['height']='1000';
+
+  // Append active class.
+  if ($path == $_GET['q'] || ($path == '<front>' && drupal_is_front_page())) {
+    if (isset($options['attributes']['class'])) {
+      $options['attributes']['class'] .= ' active';
+    }
+    else {
+      $options['attributes']['class'] = 'active';
+    }
+  }
+
+  // Remove all HTML and PHP tags from a tooltip. For best performance, we act only
+  // if a quick strpos() pre-check gave a suspicion (because strip_tags() is expensive).
+  if (isset($options['attributes']['title']) && strpos($options['attributes']['title'], '<') !== FALSE) {
+    $options['attributes']['title'] = strip_tags($options['attributes']['title']);
+  }
+
+  return (empty($text)? '' : '<div class="iframe_title">'.($options['html'] ? $text : check_plain($text)).'</div>').
+    '<iframe src="'. check_url(url($path, $options)) .'"'. drupal_attributes($options['attributes']) .
+    '>'.
+    t('Your browser does not support iframes. But You can use the following link.').' '.l('Link',$path,$options).'</iframe>';
+}
+
+

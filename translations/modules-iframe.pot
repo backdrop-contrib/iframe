@@ -1,0 +1,270 @@
+# $Id$
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  iframe.views.inc: n/a
+#  iframe.module,v 1.0.0.0 2008/07/27 21:23:38 neffets
+#  iframe.info,v 1.2 2008/07/27 06:50:42 neffets
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2008-08-14 01:23+0200\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: iframe.views.inc:17
+msgid "@label url"
+msgstr ""
+
+#: iframe.views.inc:23;56;73
+msgid "Content"
+msgstr ""
+
+#: iframe.views.inc:24;37
+msgid "@label title"
+msgstr ""
+
+#: iframe.views.inc:57;61
+msgid "@label protocol"
+msgstr ""
+
+#: iframe.views.inc:74;78
+msgid "@label target"
+msgstr ""
+
+#: iframe.views.inc:110
+msgid "Is one of"
+msgstr ""
+
+#: iframe.views.inc:144
+msgid "Protocol"
+msgstr ""
+
+#: iframe.views.inc:149
+msgid "The protocols displayed here are those globally available. You may add more protocols by modifying the <em>filter_allowed_protocols</em> variable in your installation."
+msgstr ""
+
+#: iframe.views.inc:211 iframe.module:480
+msgid "Title"
+msgstr ""
+
+#: iframe.views.inc:213
+msgid "The title to use when this argument is present; it will override the title of the view and titles from previous arguments. You can use percent substitution here to replace with argument titles. Use \"%1\" for the first argument, \"%2\" for the second, etc."
+msgstr ""
+
+#: iframe.views.inc:226
+msgid "Action to take if argument is not present"
+msgstr ""
+
+#: iframe.views.inc:238
+msgid "Wildcard"
+msgstr ""
+
+#: iframe.views.inc:241
+msgid "If this value is received as an argument, the argument will be ignored; i.e, \"all values\""
+msgstr ""
+
+#: iframe.views.inc:247
+msgid "Wildcard title"
+msgstr ""
+
+#: iframe.views.inc:250
+msgid "The title to use for the wildcard in substitutions elsewhere."
+msgstr ""
+
+#: iframe.views.inc:273
+msgid "Validator"
+msgstr ""
+
+#: iframe.views.inc:277
+msgid "<Basic validation>"
+msgstr ""
+
+#: iframe.views.inc:313
+msgid "Action to take if argument does not validate"
+msgstr ""
+
+#: iframe.module:22 iframe.info:0
+msgid "IFrame"
+msgstr ""
+
+#: iframe.module:23
+msgid "Store a title, src, and attributes in the database to assemble an iframe."
+msgstr ""
+
+#: iframe.module:40
+msgid "Optional url"
+msgstr ""
+
+#: iframe.module:43
+msgid "If checked, the url field is optional. If the url is ommitted, nothing will be displayed."
+msgstr ""
+
+#: iframe.module:47
+msgid "Optional Title"
+msgstr ""
+
+#: iframe.module:48
+msgid "Required Title"
+msgstr ""
+
+#: iframe.module:49
+msgid "Static Title: "
+msgstr ""
+
+#: iframe.module:50
+msgid "No Title"
+msgstr ""
+
+#: iframe.module:55
+msgid "IFrame Title"
+msgstr ""
+
+#: iframe.module:58
+msgid "If the iframe title is optional or required, a field will be displayed to the end user. If the iframe title is static, the iframe will always use the same title. If <a href=\"http://drupal.org/project/token\">token module</a> is installed, the static title value may use any other node field as its value. Static and token-based titles may include most inline XHTML tags such as <em>strong</em>, <em>em</em>, <em>img</em>, <em>span</em>, etc."
+msgstr ""
+
+#: iframe.module:73
+msgid "Placeholder tokens"
+msgstr ""
+
+#: iframe.module:74
+msgid "The following placeholder tokens can be used in both paths and titles. When used in a path or title, they will be replaced with the appropriate values."
+msgstr ""
+
+#: iframe.module:82
+msgid "Allow user-entered tokens"
+msgstr ""
+
+#: iframe.module:84
+msgid "Checking will allow users to enter tokens in URLs and Titles on the node edit form. This does not affect the field settings on this page."
+msgstr ""
+
+#: iframe.module:93
+msgid "Default (no target attribute)"
+msgstr ""
+
+#: iframe.module:94
+msgid "Open search in window root"
+msgstr ""
+
+#: iframe.module:95
+msgid "Open search in new window"
+msgstr ""
+
+#: iframe.module:96
+msgid "Allow the user to choose"
+msgstr ""
+
+#: iframe.module:103
+msgid "IFrame Target"
+msgstr ""
+
+#: iframe.module:109
+msgid "Additional CSS Class"
+msgstr ""
+
+#: iframe.module:110
+msgid "When output, this iframe will have this class attribute. Multiple classes should be separated by spaces."
+msgstr ""
+
+#: iframe.module:115
+msgid "width of the iframe"
+msgstr ""
+
+#: iframe.module:116;124
+msgid "iframes need fix width and height, only numbers are allowed."
+msgstr ""
+
+#: iframe.module:123
+msgid "height of the iframe"
+msgstr ""
+
+#: iframe.module:133;136
+msgid "A default width and height must be provided."
+msgstr ""
+
+#: iframe.module:198
+msgid "At least one title or URL must be entered."
+msgstr ""
+
+#: iframe.module:276
+msgid "Not a valid url-iframe."
+msgstr ""
+
+#: iframe.module:280
+msgid "Titles are required for all iframes."
+msgstr ""
+
+#: iframe.module:285
+msgid "You cannot enter a title without a iframe url."
+msgstr ""
+
+#: iframe.module:432
+msgid "Width and Height of the IFrame"
+msgstr ""
+
+#: iframe.module:471
+msgid "URL"
+msgstr ""
+
+#: iframe.module:489
+msgid "Width"
+msgstr ""
+
+#: iframe.module:497
+msgid "Height"
+msgstr ""
+
+#: iframe.module:504
+msgid "Open URL in a New Window"
+msgstr ""
+
+#: iframe.module:517
+msgid "Title, over iframe (default)"
+msgstr ""
+
+#: iframe.module:522
+msgid "IFrame without title"
+msgstr ""
+
+#: iframe.module:527
+msgid "IFrame url as plain url"
+msgstr ""
+
+#: iframe.module:568
+msgid "iframe URL"
+msgstr ""
+
+#: iframe.module:569
+msgid "iframe title"
+msgstr ""
+
+#: iframe.module:570
+msgid "Formatted html iframe"
+msgstr ""
+
+#: iframe.module:708
+msgid "Your browser does not support iframes. But You can use the following link."
+msgstr ""
+
+#: iframe.module:0
+msgid "iframe"
+msgstr ""
+
+#: iframe.info:0
+msgid "Defines simple iframe field types as CCK submodule."
+msgstr ""
+
+#: iframe.info:0
+msgid "CCK"
+msgstr ""
+
