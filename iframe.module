@@ -350,11 +350,14 @@ function _iframe_sanitize(&$item, $delta, &$field, &$node) {
   }
   $item['display_title'] = empty($title) ? '' : $title;
 
+  // load attributes by node
+  _iframe_load($item);
+
   // Add attributes defined at the widget level
   $attributes = array();
   if (!empty($item['attributes']) && is_array($item['attributes'])) {
     foreach($item['attributes'] as $attribute => $attbvalue) {
-      if (isset($item['attributes'][$attribute]) && $field['attributes'][$attribute] == 'user') {
+      if (isset($item['attributes'][$attribute]) && ($field['attributes'][$attribute] == 'user' || $attribute=='width' || $attribute=='height')) {
         $attributes[$attribute] = $attbvalue;
        }
      }
@@ -362,7 +365,8 @@ function _iframe_sanitize(&$item, $delta, &$field, &$node) {
   // Add attributes defined at the field level
   if (is_array($field['attributes'])) {
     foreach($field['attributes'] as $attribute => $attbvalue) {
-      if (!empty($attbvalue) && $attbvalue != 'default' && $attbvalue != 'user') {
+      if (!empty($attbvalue) && $attbvalue != 'default' && $attbvalue != 'user'
+&& (!isset($attributes[$attribute]) || (isset($attributes[$attribute]) && ($attribute=='width' || $attribute=='height'))) ) {
         $attributes[$attribute] = $attbvalue;
       }
     }
@@ -433,6 +437,8 @@ function theme_iframe($element) {
   $output .= '<div class="iframe-field-width iframe-field-column">' . theme('textfield', $element['attributes']['width']) . '</div>';
   $output .= '<div class="iframe-field-height iframe-field-column">' . theme('textfield', $element['attributes']['height']) . '</div>';
 
+  if (isset($element['attributes']['target'])) $output .= '<div>'.theme('checkbox', $element['attributes']['target']).'</div>';
+
   $output .= '</div>';
 
   if (!empty($element['attributes'])) {
@@ -465,6 +471,9 @@ function iframe_elements() {
 function iframe_process($element, $edit, $form_state, $form) {
    $field = $form['#field_info'][$element['#field_name']];
    $delta = $element['#delta'];
+   // load attributes by node
+    _iframe_load($element['#value']);
+
    $element['url'] = array(
      '#type' => 'textfield',
      '#maxlength' => '255',
@@ -488,7 +497,7 @@ function iframe_process($element, $edit, $form_state, $form) {
      '#size' => '4',
      '#title' => t('Width'),
      '#required' => ($delta == 0 && $field['width'] == 'required') ? $field['required'] : FALSE,
-     '#default_value' => !empty($field['attributes']['width'])? $field['attributes']['width'] : NULL,
+     '#default_value' => !empty($element['#value']['attributes']['width'])? $element['#value']['attributes']['width'] : $field['attributes']['width'],
    );
    $element['attributes']['height'] = array(
      '#type' => 'textfield',
@@ -496,7 +505,7 @@ function iframe_process($element, $edit, $form_state, $form) {
      '#size' => '4',
      '#title' => t('Height'),
      '#required' => ($delta == 0 && $field['height'] == 'required') ? $field['required'] : FALSE,
-     '#default_value' => !empty($field['attributes']['height'])? $field['attributes']['height'] : NULL,
+     '#default_value' => !empty($element['#value']['attributes']['height'])? $element['#value']['attributes']['height'] : $field['attributes']['height'],
    );
    if (!empty($field['attributes']['target']) && $field['attributes']['target'] == 'user') {
      $element['attributes']['target'] = array(
