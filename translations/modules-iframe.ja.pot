@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Drupal 6.x\n"
-"POT-Creation-Date: 2008-08-14 01:23+0200\n"
+"POT-Creation-Date: 2008-09-07 22:58+0200\n"
 "PO-Revision-Date: 2008-05-01 16:49+0900\n"
 "Last-Translator: 0829 <hixarg+0829@gmail.com>\n"
 "Language-Team: DRUPAL*DRUPAL <hixarg+0829@gmail.com>\n"
@@ -54,7 +54,7 @@ msgid ""
 "your installation."
 msgstr ""
 
-#: iframe.views.inc:211 iframe.module:480
+#: iframe.views.inc:211 iframe.module:514
 msgid "Title"
 msgstr "タイトル"
 
@@ -100,11 +100,11 @@ msgstr ""
 msgid "Action to take if argument does not validate"
 msgstr ""
 
-#: iframe.module:22 iframe.info:0
+#: iframe.module:29 iframe.info:0
 msgid "IFrame"
 msgstr ""
 
-#: iframe.module:23
+#: iframe.module:30
 #, fuzzy
 msgid ""
 "Store a title, src, and attributes in the database to assemble an iframe."
@@ -112,12 +112,12 @@ msgstr ""
 "リンクを作成するために title, href およびその他の属性をデータベースに保存しま"
 "す。"
 
-#: iframe.module:40
+#: iframe.module:48
 #, fuzzy
 msgid "Optional url"
 msgstr "タイトルオプション"
 
-#: iframe.module:43
+#: iframe.module:51
 #, fuzzy
 msgid ""
 "If checked, the url field is optional. If the url is ommitted, nothing will "
@@ -127,28 +127,28 @@ msgstr ""
 "が可能になります。 URL が省略された場合タイトルはプレーンテキストとして表示さ"
 "れます。"
 
-#: iframe.module:47
+#: iframe.module:55
 msgid "Optional Title"
 msgstr "タイトルオプション"
 
-#: iframe.module:48
+#: iframe.module:56
 msgid "Required Title"
 msgstr "タイトル必須"
 
-#: iframe.module:49
+#: iframe.module:57
 msgid "Static Title: "
 msgstr "タイトル固定"
 
-#: iframe.module:50
+#: iframe.module:58
 msgid "No Title"
 msgstr "タイトルなし"
 
-#: iframe.module:55
+#: iframe.module:63
 #, fuzzy
 msgid "IFrame Title"
 msgstr "タイトル必須"
 
-#: iframe.module:58
+#: iframe.module:66
 #, fuzzy
 msgid ""
 "If the iframe title is optional or required, a field will be displayed to "
@@ -164,11 +164,11 @@ msgstr ""
 "</a>がインストールされていれば固定タイトルに他のフィールドの内容を利用するこ"
 "とができます。"
 
-#: iframe.module:73
+#: iframe.module:81
 msgid "Placeholder tokens"
 msgstr "プレースホルダートークン"
 
-#: iframe.module:74
+#: iframe.module:82
 msgid ""
 "The following placeholder tokens can be used in both paths and titles. When "
 "used in a path or title, they will be replaced with the appropriate values."
@@ -176,12 +176,12 @@ msgstr ""
 "タイトルと URL の両方で、以下のトークン構文が使用できます。 使用されたトーク"
 "ン構文は適切な値に置換されます。"
 
-#: iframe.module:82
+#: iframe.module:90
 #, fuzzy
 msgid "Allow user-entered tokens"
 msgstr "トークンの許可"
 
-#: iframe.module:84
+#: iframe.module:92
 msgid ""
 "Checking will allow users to enter tokens in URLs and Titles on the node "
 "edit form. This does not affect the field settings on this page."
@@ -189,33 +189,33 @@ msgstr ""
 "有効にした場合、コンテンツの編集時にトークンを利用したタイトルや URL を設定で"
 "きるようになります。 このページのフィールド設定には影響を及ぼしません。"
 
-#: iframe.module:93
+#: iframe.module:101
 msgid "Default (no target attribute)"
 msgstr "デフォルト（target 属性を使用しない）"
 
-#: iframe.module:94
+#: iframe.module:102
 #, fuzzy
 msgid "Open search in window root"
 msgstr "ルートウィンドウに表示（_top）"
 
-#: iframe.module:95
+#: iframe.module:103
 #, fuzzy
 msgid "Open search in new window"
 msgstr "新しいウィンドウに表示（_blank）"
 
-#: iframe.module:96
+#: iframe.module:104
 msgid "Allow the user to choose"
 msgstr "ユーザによる選択を許可"
 
-#: iframe.module:103
+#: iframe.module:111
 msgid "IFrame Target"
 msgstr ""
 
-#: iframe.module:109
+#: iframe.module:117
 msgid "Additional CSS Class"
 msgstr "CSS クラスの追加"
 
-#: iframe.module:110
+#: iframe.module:118
 #, fuzzy
 msgid ""
 "When output, this iframe will have this class attribute. Multiple classes "
@@ -224,88 +224,88 @@ msgstr ""
 "出力時にリンクに class 属性を持たせることができます。 複数のクラスを追加した"
 "い場合はスペースで区切って入力してください。"
 
-#: iframe.module:115
+#: iframe.module:123
 msgid "width of the iframe"
 msgstr ""
 
-#: iframe.module:116;124
+#: iframe.module:124;132
 msgid "iframes need fix width and height, only numbers are allowed."
 msgstr ""
 
-#: iframe.module:123
+#: iframe.module:131
 msgid "height of the iframe"
 msgstr ""
 
-#: iframe.module:133;136
+#: iframe.module:141;144
 msgid "A default width and height must be provided."
 msgstr ""
 
-#: iframe.module:198
+#: iframe.module:209
 msgid "At least one title or URL must be entered."
 msgstr "少なくとも1つのタイトルまたは URL を入力する必要があります。"
 
-#: iframe.module:276
+#: iframe.module:292
 #, fuzzy
 msgid "Not a valid url-iframe."
 msgstr "有効な URL ではありません。"
 
-#: iframe.module:280
+#: iframe.module:296
 #, fuzzy
 msgid "Titles are required for all iframes."
 msgstr "すべてのリンクにタイトルを設定する必要があります。"
 
-#: iframe.module:285
+#: iframe.module:301
 #, fuzzy
 msgid "You cannot enter a title without a iframe url."
 msgstr ""
 "リンク URL が設定されていないため、タイトルを入力することはできません。"
 
-#: iframe.module:432
+#: iframe.module:458
 msgid "Width and Height of the IFrame"
 msgstr ""
 
-#: iframe.module:471
+#: iframe.module:505
 msgid "URL"
 msgstr "URL"
 
-#: iframe.module:489
+#: iframe.module:523
 msgid "Width"
 msgstr ""
 
-#: iframe.module:497
+#: iframe.module:531
 msgid "Height"
 msgstr ""
 
-#: iframe.module:504
+#: iframe.module:538
 msgid "Open URL in a New Window"
 msgstr "新しいウィンドウで開く"
 
-#: iframe.module:517
+#: iframe.module:552
 msgid "Title, over iframe (default)"
 msgstr ""
 
-#: iframe.module:522
+#: iframe.module:557
 msgid "IFrame without title"
 msgstr ""
 
-#: iframe.module:527
+#: iframe.module:562
 msgid "IFrame url as plain url"
 msgstr ""
 
-#: iframe.module:568
+#: iframe.module:607
 msgid "iframe URL"
 msgstr ""
 
-#: iframe.module:569
+#: iframe.module:608
 #, fuzzy
 msgid "iframe title"
 msgstr "タイトル必須"
 
-#: iframe.module:570
+#: iframe.module:609
 msgid "Formatted html iframe"
 msgstr ""
 
-#: iframe.module:708
+#: iframe.module:757
 msgid ""
 "Your browser does not support iframes. But You can use the following link."
 msgstr ""
