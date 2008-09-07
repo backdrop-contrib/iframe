@@ -13,10 +13,17 @@ define('iframe_FRONT', 'front');
 define('iframe_EMAIL', 'email');
 define('iframe_DOMAINS', 'aero|arpa|biz|com|cat|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|mobi|local');
 
+if (!defined('DEBUG_LEVEL')) define('DEBUG_LEVEL',1);
+if (!function_exists('dmsg')) {
+ function dmsg ($level,$text) {
+   if ($level <= DEBUG_LEVEL) error_log('iframe('.$level.'): '.$text);
+ }
+}
 /**
  * Implementation of hook_field_info().
  */
 function iframe_field_info() {
+  dmsg(3,'func iframe_field_info');
   return array(
     'iframe' => array(
       'label' => t('IFrame'),
@@ -29,6 +36,7 @@ function iframe_field_info() {
  * Implementation of hook_field_settings().
  */
 function iframe_field_settings($op, $field) {
+  dmsg(3,'func iframe_field_settings op='.$op);
   switch ($op) {
     case 'form':
       $form = array(
@@ -157,6 +165,7 @@ function iframe_field_settings($op, $field) {
  * Theme the settings form for the iframe field.
  */
 function theme_iframe_field_settings($form) {
+  dmsg(3,'func theme_iframe_field_settings');
   $title_value = drupal_render($form['title_value']);
   $title_checkbox = drupal_render($form['title']['value']);
 
@@ -171,6 +180,7 @@ function theme_iframe_field_settings($form) {
  * Implementation of hook_content_is_empty().
  */
 function iframe_content_is_empty($item, $field) {
+  dmsg(3,'func iframe_content_is_empty');
   if (empty($item['url'])) {
     return TRUE;
   }
@@ -181,6 +191,7 @@ function iframe_content_is_empty($item, $field) {
  * Implementation of hook_field().
  */
 function iframe_field($op, &$node, $field, &$items, $teaser, $page) {
+  dmsg(3,'func iframe_field op='.$op.' field='.$field);
   switch ($op) {
     case 'load':
       foreach ($items as $delta => $item) {
@@ -217,6 +228,7 @@ function iframe_field($op, &$node, $field, &$items, $teaser, $page) {
  * Implementation of hook_widget_info().
  */
 function iframe_widget_info() {
+  dmsg(3,'func iframe_widget_info');
   return array(
     'iframe' => array(
       'label' => 'Text Fields for Title and iframe-url',
@@ -230,6 +242,7 @@ function iframe_widget_info() {
  * Implementation of hook_widget().
  */
 function iframe_widget(&$form, &$form_state, $field, $items, $delta = 0) {
+  dmsg(3,'func iframe_widget');
   $element = array(
     '#type' => $field['widget']['type'],
     '#default_value' => isset($items[$delta]) ? $items[$delta] : '',
@@ -243,11 +256,13 @@ function iframe_widget(&$form, &$form_state, $field, $items, $delta = 0) {
 }
 
 function _iframe_load(&$item, $delta = 0) {
+  dmsg(3,'func _iframe_load');
   // Unserialize the attributes array.
-  $item['attributes'] = unserialize($item['attributes']);
+  if (!is_array($item['attributes'])) $item['attributes'] = unserialize($item['attributes']);
 }
 
 function _iframe_process(&$item, $delta = 0, $field, $node) {
+  dmsg(3,'func _iframe_process');
   // Remove the target attribute if not selected.
   if (!$item['attributes']['target'] || $item['attributes']['target'] == "default") {
     unset($item['attributes']['target']);
@@ -270,6 +285,7 @@ function _iframe_process(&$item, $delta = 0, $field, $node) {
 }
 
 function _iframe_validate(&$item, $delta, $field, $node, &$optional_field_found) {
+  dmsg(3,'func _iframe_validate');
   if ($item['url'] && !(isset($field['widget']['default_value'][$delta]['url']) && $item['url'] == $field['widget']['default_value'][$delta]['url'] && !$field['required'])) {
     // Validate the iframe.
     if (iframe_validate_url(trim($item['url'])) == FALSE) {
@@ -303,6 +319,7 @@ function _iframe_validate(&$item, $delta, $field, $node, &$optional_field_found)
  *   The node containing this iframe.
  */
 function _iframe_sanitize(&$item, $delta, &$field, &$node) {
+  dmsg(3,'func _iframe_sanitize');
   // Don't try to process empty iframes.
   if (empty($item['url']) && empty($item['title'])) {
     return;
@@ -382,12 +399,16 @@ function _iframe_sanitize(&$item, $delta, &$field, &$node) {
 
   // Add the widget label.
   $item['label'] = $field['widget']['label'];
+
+  // Ad identifier for the iframe html-code
+  $item['html-id'] = 'iframe-'.$delta;
 }
 
 /**
  * Implementation of hook_theme().
  */
 function iframe_theme() {
+  dmsg(3,'func iframe_theme');
   return array(
     'iframe_field_settings' => array(
       'arguments' => array('element' => NULL),
@@ -411,6 +432,7 @@ function iframe_theme() {
  * FAPI theme for an individual text elements.
  */
 function theme_iframe($element) {
+  dmsg(3,'func theme_iframe');
   drupal_add_css(drupal_get_path('module', 'iframe') .'/iframe.css');
 
   // Prefix single value iframe fields with the name of the field.
@@ -451,6 +473,7 @@ function theme_iframe($element) {
  * Implementation of hook_elements().
  */
 function iframe_elements() {
+  dmsg(3,'func iframe_elements');
   $elements = array();
   $elements['iframe'] =  array(
     '#input' => TRUE,
@@ -469,10 +492,12 @@ function iframe_elements() {
  * The $fields array is in $form['#field_info'][$element['#field_name']].
  */
 function iframe_process($element, $edit, $form_state, $form) {
+  dmsg(3,'func iframe_process');
    $field = $form['#field_info'][$element['#field_name']];
    $delta = $element['#delta'];
    // load attributes by node
     _iframe_load($element['#value']);
+error_log('FFPO');
 
    $element['url'] = array(
      '#type' => 'textfield',
@@ -521,6 +546,7 @@ function iframe_process($element, $edit, $form_state, $form) {
  * Implementation of hook_field_formatter_info().
  */
 function iframe_field_formatter_info() {
+  dmsg(3,'func iframe_field_formatter_info');
   return array(
     'default' => array(
       'label' => t('Title, over iframe (default)'),
@@ -544,6 +570,7 @@ function iframe_field_formatter_info() {
  * Theme function for 'default' text field formatter.
  */
 function theme_iframe_formatter_default($element) {
+  dmsg(3,'func theme_iframe_formatter_default');
   // If no url given display nothing.
   if (empty($element['#item']['url'])) return '';
   // Display all
@@ -554,6 +581,7 @@ function theme_iframe_formatter_default($element) {
  * Theme function for 'iframeonly' text field formatter.
  */
 function theme_iframe_formatter_iframeonly($element) {
+  dmsg(3,'func theme_iframe_formatter_iframeonly');
   // If no url given display nothing.
   if (empty($element['#item']['url'])) return '';
   // Display all
@@ -564,6 +592,7 @@ function theme_iframe_formatter_iframeonly($element) {
  * Theme function for 'asurl' text field formatter.
  */
 function theme_iframe_formatter_asurl($element) {
+  dmsg(3,'func theme_iframe_formatter_asurl');
   // If no url given display nothing.
   if (empty($element['#item']['url'])) return '';
   // Display all
@@ -571,6 +600,7 @@ function theme_iframe_formatter_asurl($element) {
 }
 
 function iframe_token_list($type = 'all') {
+  dmsg(3,'func iframe_token_list');
   if ($type == 'field' || $type == 'all') {
     $tokens = array();
 
@@ -583,6 +613,7 @@ function iframe_token_list($type = 'all') {
 }
 
 function iframe_token_values($type, $object = NULL) {
+  dmsg(3,'func iframe_token_values');
   if ($type == 'field') {
     $item = $object[0];
 
@@ -602,15 +633,16 @@ function iframe_token_values($type, $object = NULL) {
  * @param string $protocol The protocol to be prepended to the url if one is not specified
  */
 function iframe_cleanup_url($url, $protocol = "http") {
+  dmsg(3,'func iframe_cleanup_url');
   $url = trim($url);
   $type = iframe_validate_url($url);
 
   if ($type == iframe_EXTERNAL) {
     // Check if there is no protocol specified.
-    $protocol_match = preg_match("/^([a-z0-9][a-z0-9\.\-_]*:\/\/)/i",$url);
+    $protocol_match = preg_match("/^([a-z0-9][a-z0-9\.\-_äöü]*:\/\/)/i",$url);
     if (empty($protocol_match)) {
       // But should there be? Add an automatic http:// if it starts with a domain name.
-      $domain_match = preg_match('/^(([a-z0-9]([a-z0-9\-_]*\.)+)('. iframe_DOMAINS .'|[a-z]{2}))/i',$url);
+      $domain_match = preg_match('/^(([a-z0-9]([a-z0-9\-_äöü]*\.)+)('. iframe_DOMAINS .'|[a-z]{2}))/i',$url);
       if (!empty($domain_match)) {
         $url = $protocol."://".$url;
       }
@@ -630,12 +662,13 @@ function iframe_cleanup_url($url, $protocol = "http") {
  * the following attributes: protocol, hostname, ip, and port.
  */
 function iframe_validate_url($text) {
+  dmsg(3,'func iframe_validate_url');
 
   $allowed_protocols = variable_get('filter_allowed_protocols', array('http', 'https', 'ftp', 'news', 'nntp', 'telnet', 'mailto', 'irc', 'ssh', 'sftp', 'webcal'));
 
   $protocol = '((' . implode("|", $allowed_protocols) . '):\/\/)';
   $authentication = '([a-z0-9]+(:[a-z0-9]+)?@)';
-  $domain = '(([a-z0-9]([a-z0-9\-_\[\]])*)(\.(([a-z0-9\-_\[\]])+\.)*('. iframe_DOMAINS .'|[a-z]{2}))?)';
+  $domain = '(([a-z0-9]([a-z0-9\-_\[\]äöü])*)(\.(([a-z0-9\-_\[\]äöü])+\.)*('. iframe_DOMAINS .'|[a-z]{2}))?)';
   $ipv4 = '([0-9]{1,3}(\.[0-9]{1,3}){3})';
   $ipv6 = '([0-9a-fA-F]{1,4}(\:[0-9a-fA-F]{1,4}){7})';
   $port = '(:([0-9]{1,5}))';
@@ -677,6 +710,7 @@ function iframe_validate_url($text) {
  * validate size: width and height of an iframe
 */
 function iframe_validate_size($size,$default="100") {
+  dmsg(3,'func iframe_validate_size');
   if (is_numeric($size)) return $size;
   if (preg_match('/^\d+\%$/',$size)) return $size;
   return $default;
@@ -687,13 +721,18 @@ function iframe_validate_size($size,$default="100") {
  * form the iframe code
 */
 function iframe_iframe($text, $path, $options = array()) {
+  dmsg(3,'func iframe_iframe');
   // Merge in defaults.
+//error_log('IFIF options='.implode(" ++ ",explode("\n",print_r($options,TRUE))));
   $options += array(
       'attributes' => array(),
       'html' => FALSE,
     );
   if (!isset($options['attributes']['width'])) $options['attributes']['width']='100%';
   if (!isset($options['attributes']['height'])) $options['attributes']['height']='1000';
+
+  $htmlid='';
+  if (isset($options['html-id']) && !empty($options['html-id'])) $htmlid=' id="'.$options['html-id'].'" name="'.$options['html-id'].'"';
 
   // Append active class.
   if ($path == $_GET['q'] || ($path == '<front>' && drupal_is_front_page())) {
@@ -713,6 +752,7 @@ function iframe_iframe($text, $path, $options = array()) {
 
   return (empty($text)? '' : '<div class="iframe_title">'.($options['html'] ? $text : check_plain($text)).'</div>').
     '<iframe src="'. check_url(url($path, $options)) .'"'. drupal_attributes($options['attributes']) .
+    $htmlid.
     '>'.
     t('Your browser does not support iframes. But You can use the following link.').' '.l('Link',$path,$options).'</iframe>';
 }
