@@ -3,23 +3,23 @@
 # LANGUAGE translation of Drupal (general)
 # Copyright 2008 Schüssler <drupal@neffets.de>
 # Generated from files:
-# iframe.module,v 1.0.0.0 2008/07/27 21:23:38 neffets
-# link.info,v 1.2 2008/07/27 06:50:42 neffets
+#  iframe.module,v 1.0.0.0 2008/07/27 21:23:38 neffets
+#  link.info,v 1.2 2008/07/27 06:50:42 neffets
+#
 # Steffen Schüssler <drupal@neffets.de>, 2008.
-# 
-# 
 msgid ""
 msgstr ""
 "Project-Id-Version: modules-iframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-07 22:58+0200\n"
-"PO-Revision-Date: 2008-09-07 23:14+0200\n"
+"POT-Creation-Date: 2008-11-09 22:27+0100\n"
+"PO-Revision-Date: 2008-08-14 01:35+0200\n"
 "Last-Translator: Steffen Schüssler <drupal@neffets.de>\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: iframe.views.inc:17
 msgid "@label url"
@@ -60,7 +60,7 @@ msgstr ""
 "Die hier verfügbaren Protokolle können erweitert werden. Dazu ist die "
 "Variable <em>filter_allowed_protocols</em> in der Installation anzupassen."
 
-#: iframe.views.inc:211 iframe.module:514
+#: iframe.views.inc:211 iframe.module:518
 msgid "Title"
 msgstr "Titel"
 
@@ -70,7 +70,7 @@ msgid ""
 "of the view and titles from previous arguments. You can use percent "
 "substitution here to replace with argument titles. Use \"%1\" for the first "
 "argument, \"%2\" for the second, etc."
-msgstr "Der Titel überschreibt, soweit vorhanden, den Titel dieses Views und Titel von vorherigen Parametern. Hier können Prozent-Ersetzungen benutzt werden, um doch noch mit vorherigen Parameter-Titeln zu arbeiten. \"%1\" für das erste Argument, \"%2\" für das zweite, usw."
+msgstr ""
 
 #: iframe.views.inc:226
 msgid "Action to take if argument is not present"
@@ -93,15 +93,15 @@ msgstr "Freier Titel"
 
 #: iframe.views.inc:250
 msgid "The title to use for the wildcard in substitutions elsewhere."
-msgstr "Der Titel der anstelle des Wildcard in Ersetzungen benutzt werden soll."
+msgstr ""
 
 #: iframe.views.inc:273
 msgid "Validator"
-msgstr "Validator"
+msgstr ""
 
 #: iframe.views.inc:277
 msgid "<Basic validation>"
-msgstr "<Basic validation>"
+msgstr ""
 
 #: iframe.views.inc:313
 msgid "Action to take if argument does not validate"
@@ -243,67 +243,67 @@ msgstr "Höhe des IFrame"
 msgid "A default width and height must be provided."
 msgstr "Eine Standard-Breite und Höhe müssen angegeben werden."
 
-#: iframe.module:209
+#: iframe.module:213
 msgid "At least one title or URL must be entered."
 msgstr "Mindestens ein Titel oder ein Verweis müssen angegeben werden."
 
-#: iframe.module:292
+#: iframe.module:296
 msgid "Not a valid url-iframe."
 msgstr "Kein gültiger IFrame-Verweis."
 
-#: iframe.module:296
+#: iframe.module:300
 msgid "Titles are required for all iframes."
 msgstr "Titel sind für alle IFrames notwendig."
 
-#: iframe.module:301
+#: iframe.module:305
 msgid "You cannot enter a title without a iframe url."
 msgstr "Ohne einen IFrame-Verweis macht ein Titel keinen Sinn."
 
-#: iframe.module:458
+#: iframe.module:462
 msgid "Width and Height of the IFrame"
 msgstr "Breite und Höhe des IFrames"
 
-#: iframe.module:505
+#: iframe.module:509
 msgid "URL"
 msgstr "Verweis"
 
-#: iframe.module:523
+#: iframe.module:527
 msgid "Width"
 msgstr "Breite"
 
-#: iframe.module:531
+#: iframe.module:535
 msgid "Height"
 msgstr "Höhe"
 
-#: iframe.module:538
+#: iframe.module:542
 msgid "Open URL in a New Window"
 msgstr "Öffne den Verweis im neuen Fenster"
 
-#: iframe.module:552
+#: iframe.module:556
 msgid "Title, over iframe (default)"
 msgstr "Titel über dem IFrame (default)"
 
-#: iframe.module:557
+#: iframe.module:561
 msgid "IFrame without title"
 msgstr "IFrame ohne Titel"
 
-#: iframe.module:562
+#: iframe.module:566
 msgid "IFrame url as plain url"
 msgstr "IFrame nur als Link darstellen"
 
-#: iframe.module:607
+#: iframe.module:611
 msgid "iframe URL"
 msgstr "IFrame Verweis"
 
-#: iframe.module:608
+#: iframe.module:612
 msgid "iframe title"
 msgstr "IFrame Titel"
 
-#: iframe.module:609
+#: iframe.module:613
 msgid "Formatted html iframe"
 msgstr "Formatiertes IFrame-html"
 
-#: iframe.module:757
+#: iframe.module:761
 msgid ""
 "Your browser does not support iframes. But You can use the following link."
 msgstr ""
@@ -321,4 +321,3 @@ msgstr "Definiert einfache IFrames als CCK submodule."
 #: iframe.info:0
 msgid "CCK"
 msgstr "CCK-Modul"
-

@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Drupal 6.x\n"
-"POT-Creation-Date: 2008-09-07 22:58+0200\n"
+"POT-Creation-Date: 2008-11-09 22:27+0100\n"
 "PO-Revision-Date: 2008-05-01 16:49+0900\n"
 "Last-Translator: 0829 <hixarg+0829@gmail.com>\n"
 "Language-Team: DRUPAL*DRUPAL <hixarg+0829@gmail.com>\n"
@@ -54,7 +54,7 @@ msgid ""
 "your installation."
 msgstr ""
 
-#: iframe.views.inc:211 iframe.module:514
+#: iframe.views.inc:211 iframe.module:518
 msgid "Title"
 msgstr "タイトル"
 
@@ -240,72 +240,72 @@ msgstr ""
 msgid "A default width and height must be provided."
 msgstr ""
 
-#: iframe.module:209
+#: iframe.module:213
 msgid "At least one title or URL must be entered."
 msgstr "少なくとも1つのタイトルまたは URL を入力する必要があります。"
 
-#: iframe.module:292
+#: iframe.module:296
 #, fuzzy
 msgid "Not a valid url-iframe."
 msgstr "有効な URL ではありません。"
 
-#: iframe.module:296
+#: iframe.module:300
 #, fuzzy
 msgid "Titles are required for all iframes."
 msgstr "すべてのリンクにタイトルを設定する必要があります。"
 
-#: iframe.module:301
+#: iframe.module:305
 #, fuzzy
 msgid "You cannot enter a title without a iframe url."
 msgstr ""
 "リンク URL が設定されていないため、タイトルを入力することはできません。"
 
-#: iframe.module:458
+#: iframe.module:462
 msgid "Width and Height of the IFrame"
 msgstr ""
 
-#: iframe.module:505
+#: iframe.module:509
 msgid "URL"
 msgstr "URL"
 
-#: iframe.module:523
+#: iframe.module:527
 msgid "Width"
 msgstr ""
 
-#: iframe.module:531
+#: iframe.module:535
 msgid "Height"
 msgstr ""
 
-#: iframe.module:538
+#: iframe.module:542
 msgid "Open URL in a New Window"
 msgstr "新しいウィンドウで開く"
 
-#: iframe.module:552
+#: iframe.module:556
 msgid "Title, over iframe (default)"
 msgstr ""
 
-#: iframe.module:557
+#: iframe.module:561
 msgid "IFrame without title"
 msgstr ""
 
-#: iframe.module:562
+#: iframe.module:566
 msgid "IFrame url as plain url"
 msgstr ""
 
-#: iframe.module:607
+#: iframe.module:611
 msgid "iframe URL"
 msgstr ""
 
-#: iframe.module:608
+#: iframe.module:612
 #, fuzzy
 msgid "iframe title"
 msgstr "タイトル必須"
 
-#: iframe.module:609
+#: iframe.module:613
 msgid "Formatted html iframe"
 msgstr ""
 
-#: iframe.module:757
+#: iframe.module:761
 msgid ""
 "Your browser does not support iframes. But You can use the following link."
 msgstr ""

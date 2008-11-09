@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"POT-Creation-Date: 2008-09-07 22:58+0200\n"
+"POT-Creation-Date: 2008-11-09 22:27+0100\n"
 "PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
 "Last-Translator: NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -52,7 +52,7 @@ msgstr ""
 msgid "The protocols displayed here are those globally available. You may add more protocols by modifying the <em>filter_allowed_protocols</em> variable in your installation."
 msgstr ""
 
-#: iframe.views.inc:211 iframe.module:514
+#: iframe.views.inc:211 iframe.module:518
 msgid "Title"
 msgstr ""
 
@@ -192,67 +192,67 @@ msgstr ""
 msgid "A default width and height must be provided."
 msgstr ""
 
-#: iframe.module:209
+#: iframe.module:213
 msgid "At least one title or URL must be entered."
 msgstr ""
 
-#: iframe.module:292
+#: iframe.module:296
 msgid "Not a valid url-iframe."
 msgstr ""
 
-#: iframe.module:296
+#: iframe.module:300
 msgid "Titles are required for all iframes."
 msgstr ""
 
-#: iframe.module:301
+#: iframe.module:305
 msgid "You cannot enter a title without a iframe url."
 msgstr ""
 
-#: iframe.module:458
+#: iframe.module:462
 msgid "Width and Height of the IFrame"
 msgstr ""
 
-#: iframe.module:505
+#: iframe.module:509
 msgid "URL"
 msgstr ""
 
-#: iframe.module:523
+#: iframe.module:527
 msgid "Width"
 msgstr ""
 
-#: iframe.module:531
+#: iframe.module:535
 msgid "Height"
 msgstr ""
 
-#: iframe.module:538
+#: iframe.module:542
 msgid "Open URL in a New Window"
 msgstr ""
 
-#: iframe.module:552
+#: iframe.module:556
 msgid "Title, over iframe (default)"
 msgstr ""
 
-#: iframe.module:557
+#: iframe.module:561
 msgid "IFrame without title"
 msgstr ""
 
-#: iframe.module:562
+#: iframe.module:566
 msgid "IFrame url as plain url"
 msgstr ""
 
-#: iframe.module:607
+#: iframe.module:611
 msgid "iframe URL"
 msgstr ""
 
-#: iframe.module:608
+#: iframe.module:612
 msgid "iframe title"
 msgstr ""
 
-#: iframe.module:609
+#: iframe.module:613
 msgid "Formatted html iframe"
 msgstr ""
 
-#: iframe.module:757
+#: iframe.module:761
 msgid "Your browser does not support iframes. But You can use the following link."
 msgstr ""
 
