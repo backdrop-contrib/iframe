@@ -383,7 +383,7 @@ function _iframe_sanitize(&$item, $delta, &$field, &$node) {
     $title = filter_xss(token_replace($title, 'node', $token_node), array('b', 'br', 'code', 'em', 'i', 'img', 'span', 'strong', 'sub', 'sup', 'tt', 'u'));
     $item['html'] = TRUE;
   }
-  $item['display_title'] = empty($title) ? $item['display_url'] : $title;
+  $item['display_title'] = empty($title) ? '' : $title;
 
   // load attributes by node
   _iframe_load($item);
