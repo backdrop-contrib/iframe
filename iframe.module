@@ -160,6 +160,7 @@ function iframe_field_settings($op, $field) {
       if (module_exists('views')) {
         //return iframe_views_content_field_data($field);
 	$todo = 'Views integration has to be fixed for current cck/views';
+        return;
       }
   }
 }
@@ -761,7 +762,8 @@ function iframe_iframe($text, $path, $options = array()) {
 }
 
 /*
+// views API changed, no need to support it further
 if (module_exists('views')) {
-  require_once('iframe.views.inc');
+//  require_once('iframe.views.inc');
 }
 */
