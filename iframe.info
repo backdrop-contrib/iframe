@@ -4,9 +4,4 @@ description = Defines simple iframe field types as CCK submodule.
 dependencies[] = content
 package = CCK
 core = 6.x
-; Information added by drupal.org packaging script on 2008-07-18
-version = "6.x-1.0"
-core = "6.x"
-project = "iframe"
-datestamp = "1216417210"
 

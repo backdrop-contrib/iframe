@@ -5,6 +5,7 @@
  * Implementation of hook_install().
  */
 function iframe_install() {
+  drupal_load('module', 'content');
   content_notify('install', 'iframe');
 }
 
@@ -12,6 +13,7 @@ function iframe_install() {
 * Implementation of hook_uninstall().
 */
 function iframe_uninstall() {
+  drupal_load('module', 'content');
   content_notify('uninstall', 'iframe');
 }
 
@@ -19,6 +21,7 @@ function iframe_uninstall() {
 * Implementation of hook_enable().
 */
 function iframe_enable() {
+  drupal_load('module', 'content');
   content_notify('enable', 'iframe');
 }
 
@@ -26,17 +29,26 @@ function iframe_enable() {
 * Implementation of hook_disable().
 */
 function iframe_disable() {
+  drupal_load('module', 'content');
   content_notify('disable', 'iframe');
 }
 
 /**
- * Removed iframe.module created tables, move data to content.module tables
- * attributes will contain width,heigth,...
+ * Implementation of hook_update_last_removed().
+ */
+function iframe_update_last_removed() {
+  return 1;
+}
+
+/**
+ * migration 1
+ * dropped senseless field "target"
  */
 function iframe_update_1() {
+  return 1;
   $ret = array();
 
-  include_once(drupal_get_path('module', 'content') .'/content.module');
+  drupal_load('module', 'content');
   include_once(drupal_get_path('module', 'content') .'/includes/content.admin.inc');
 
   $fields = content_fields();

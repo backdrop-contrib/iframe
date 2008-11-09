@@ -146,7 +146,7 @@ function iframe_field_settings($op, $field) {
       break;
 
     case 'save':
-      return array('attributes', 'display', 'url', 'title', 'title_value', 'target', 'enable_tokens');
+      return array('attributes', 'display', 'url', 'title', 'title_value', 'enable_tokens');
 
     case 'database columns':
       return array(
