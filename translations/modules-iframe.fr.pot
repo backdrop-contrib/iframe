@@ -1,0 +1,382 @@
+# $id$
+msgid ""
+msgstr ""
+"Project-Id-Version: iframe drupal module : french translation\n"
+"POT-Creation-Date: 2008-11-10 00:32+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Sylvain Moreau <sylvain.moreau@ows.fr>\n"
+"Language-Team: Sylvain Moreau <sylvain.moreau@ows.fr>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: iframe.views.inc:17
+msgid "@label url"
+msgstr ""
+
+#: iframe.views.inc:23;56;73
+msgid "Content"
+msgstr ""
+
+#: iframe.views.inc:24;37
+msgid "@label title"
+msgstr ""
+
+#: iframe.views.inc:57;61
+#, fuzzy
+msgid "@label protocol"
+msgstr "Protocole"
+
+#: iframe.views.inc:74;78
+msgid "@label target"
+msgstr ""
+
+#: iframe.views.inc:110
+msgid "Is one of"
+msgstr ""
+
+#: iframe.views.inc:144
+msgid "Protocol"
+msgstr "Protocole"
+
+#: iframe.views.inc:149
+msgid ""
+"The protocols displayed here are those globally available. You may add more "
+"protocols by modifying the <em>filter_allowed_protocols</em> variable in "
+"your installation."
+msgstr ""
+
+#: iframe.views.inc:211 iframe.module:516
+msgid "Title"
+msgstr "Titre"
+
+#: iframe.views.inc:213
+msgid ""
+"The title to use when this argument is present; it will override the title "
+"of the view and titles from previous arguments. You can use percent "
+"substitution here to replace with argument titles. Use \"%1\" for the first "
+"argument, \"%2\" for the second, etc."
+msgstr ""
+
+#: iframe.views.inc:226
+msgid "Action to take if argument is not present"
+msgstr ""
+
+#: iframe.views.inc:238
+msgid "Wildcard"
+msgstr ""
+
+#: iframe.views.inc:241
+msgid ""
+"If this value is received as an argument, the argument will be ignored; i.e, "
+"\"all values\""
+msgstr ""
+
+#: iframe.views.inc:247
+msgid "Wildcard title"
+msgstr ""
+
+#: iframe.views.inc:250
+msgid "The title to use for the wildcard in substitutions elsewhere."
+msgstr ""
+
+#: iframe.views.inc:273
+msgid "Validator"
+msgstr ""
+
+#: iframe.views.inc:277
+msgid "<Basic validation>"
+msgstr ""
+
+#: iframe.views.inc:313
+msgid "Action to take if argument does not validate"
+msgstr ""
+
+#: iframe.module:29 iframe.info:0
+msgid "IFrame"
+msgstr ""
+
+#: iframe.module:30
+msgid ""
+"Store a title, src, and attributes in the database to assemble an iframe."
+msgstr ""
+
+#: iframe.module:48
+#, fuzzy
+msgid "Optional url"
+msgstr "Titre Optionnel"
+
+#: iframe.module:51
+msgid ""
+"If checked, the url field is optional. If the url is ommitted, nothing will "
+"be displayed."
+msgstr ""
+
+#: iframe.module:55
+msgid "Optional Title"
+msgstr "Titre Optionnel"
+
+#: iframe.module:56
+msgid "Required Title"
+msgstr "Titre Obligatoire"
+
+#: iframe.module:57
+msgid "Static Title: "
+msgstr "Titre Statique : "
+
+#: iframe.module:58
+msgid "No Title"
+msgstr "Aucun Titre"
+
+#: iframe.module:63
+#, fuzzy
+msgid "IFrame Title"
+msgstr "Titre Obligatoire"
+
+#: iframe.module:66
+#, fuzzy
+msgid ""
+"If the iframe title is optional or required, a field will be displayed to "
+"the end user. If the iframe title is static, the iframe will always use the "
+"same title. If <a href=\"http://drupal.org/project/token\">token module</a> "
+"is installed, the static title value may use any other node field as its "
+"value. Static and token-based titles may include most inline XHTML tags such "
+"as <em>strong</em>, <em>em</em>, <em>img</em>, <em>span</em>, etc."
+msgstr ""
+"Si le titre du lien est optionnel ou obligatoire, un champ sera affiché à "
+"l'utilisateur final. Si le titre du lien est statique, le lien utilisera "
+"toujours le même titre. Si <a href=\"http://drupal.org/project/token\">le "
+"module token</a> est installé, la valeur du titre statique peut utiliser "
+"n'importe quel autre champ du noeud en tant que valeur."
+
+#: iframe.module:81
+#, fuzzy
+msgid "Placeholder tokens"
+msgstr "Ebauches de jetons"
+
+#: iframe.module:82
+#, fuzzy
+msgid ""
+"The following placeholder tokens can be used in both paths and titles. When "
+"used in a path or title, they will be replaced with the appropriate values."
+msgstr ""
+"Les ébauches de jetons suivantes peuvent être utilisées à la fois dans les "
+"chemins et dans les titres. Lorsqu'elles sont utilisées dans un chemin ou un "
+"titre, elles seront remplacées par les valeurs appropriées."
+
+#: iframe.module:90
+#, fuzzy
+msgid "Allow user-entered tokens"
+msgstr "Autoriser les jetons (tokens)"
+
+#: iframe.module:92
+msgid ""
+"Checking will allow users to enter tokens in URLs and Titles on the node "
+"edit form. This does not affect the field settings on this page."
+msgstr ""
+"Le fait de cocher cette case permettra aux utilisateurs de saisir des jetons "
+"dans les URL et les Titres dans le formulaire d'édition du noeud. Ceci "
+"n'affecte pas les configurations de champ sur cette page."
+
+#: iframe.module:101
+msgid "Default (no target attribute)"
+msgstr "Par Défaut (aucun attribut de cible)"
+
+#: iframe.module:102
+#, fuzzy
+msgid "Open search in window root"
+msgstr "Ouvrir le lien dans la fenêtre courante"
+
+#: iframe.module:103
+#, fuzzy
+msgid "Open search in new window"
+msgstr "Ouvrir le lien dans une nouvelle fenêtre"
+
+#: iframe.module:104
+msgid "Allow the user to choose"
+msgstr "Autoriser l'utilisateur à choisir"
+
+#: iframe.module:111
+msgid "IFrame Target"
+msgstr ""
+
+#: iframe.module:117
+msgid "Additional CSS Class"
+msgstr "Classe CSS additionnelle"
+
+#: iframe.module:118
+#, fuzzy
+msgid ""
+"When output, this iframe will have this class attribute. Multiple classes "
+"should be separated by spaces."
+msgstr ""
+"A l'affichage, ce lien possédera cet attribut de classe. Les classes "
+"multiples doivent être séparées par des espaces."
+
+#: iframe.module:123
+msgid "width of the iframe"
+msgstr ""
+
+#: iframe.module:124;132
+msgid "iframes need fix width and height, only numbers are allowed."
+msgstr ""
+
+#: iframe.module:131
+msgid "height of the iframe"
+msgstr ""
+
+#: iframe.module:141;144
+msgid "A default width and height must be provided."
+msgstr ""
+
+#: iframe.module:213
+msgid "At least one title or URL must be entered."
+msgstr ""
+
+#: iframe.module:296
+#, fuzzy
+msgid "Not a valid url-iframe."
+msgstr "Cette URL n'est pas valide."
+
+#: iframe.module:300
+#, fuzzy
+msgid "Titles are required for all iframes."
+msgstr "Les titres sont obligatoires pour tous les liens."
+
+#: iframe.module:305
+#, fuzzy
+msgid "You cannot enter a title without a iframe url."
+msgstr "Vous ne pouvez pas saisir de titre sans un lien."
+
+#: iframe.module:462
+msgid "Width and Height of the IFrame"
+msgstr ""
+
+#: iframe.module:507
+msgid "URL"
+msgstr "URL"
+
+#: iframe.module:525
+msgid "Width"
+msgstr ""
+
+#: iframe.module:533
+msgid "Height"
+msgstr ""
+
+#: iframe.module:540
+msgid "Open URL in a New Window"
+msgstr "Ouvril l'URL dans une Nouvelle Fenêtre"
+
+#: iframe.module:554
+msgid "Title, over iframe (default)"
+msgstr ""
+
+#: iframe.module:559
+msgid "IFrame without title"
+msgstr ""
+
+#: iframe.module:564
+msgid "IFrame url as plain url"
+msgstr ""
+
+#: iframe.module:609
+msgid "iframe URL"
+msgstr ""
+
+#: iframe.module:610
+#, fuzzy
+msgid "iframe title"
+msgstr "Titre Obligatoire"
+
+#: iframe.module:611
+msgid "Formatted html iframe"
+msgstr ""
+
+#: iframe.module:759
+msgid ""
+"Your browser does not support iframes. But You can use the following link."
+msgstr ""
+
+#: iframe.module:0
+msgid "iframe"
+msgstr ""
+
+#: iframe.info:0
+#, fuzzy
+msgid "Defines simple iframe field types as CCK submodule."
+msgstr "Définit les types de champs \"lien simple\"."
+
+#: iframe.info:0
+msgid "CCK"
+msgstr "CCK"
+
+#~ msgid "Link Title"
+#~ msgstr "Titre du Lien"
+
+#~ msgid "URL Display Cutoff"
+#~ msgstr "Coupure de l'Affichage de l'URL"
+
+#~ msgid ""
+#~ "If the user does not include a title for this link, the URL will be used "
+#~ "as the title. When should the link title be trimmed and finished with an "
+#~ "elipsis (&hellip;)? Leave blank for no limit."
+#~ msgstr ""
+#~ "Si l'utilisateur n'inclue pas de titre pour ce lien, l'URL sera utilisée "
+#~ "en tant que titre. A quel endroit le lien devra-t-il être coupé et "
+#~ "terminé par une ellipse (&hellip;) ? Laissez vide pour aucune limite."
+
+#~ msgid "Link Target"
+#~ msgstr "Cible du Lien"
+
+#~ msgid "Rel Attribute"
+#~ msgstr "Attribut Rel"
+
+#~ msgid ""
+#~ "When output, this link will have this rel attribute. The most common "
+#~ "usage is <a href=\"http://en.wikipedia.org/wiki/Nofollow\">rel=&quot;"
+#~ "nofollow&quot;</a> which prevents some search engines from spidering "
+#~ "entered links."
+#~ msgstr ""
+#~ "Quand il sera affiché, ce lien aura cet attribut rel. L'usage le plus "
+#~ "commun est <a href=\"http://fr.wikipedia.org/wiki/Nofollow\">rel=&quot;"
+#~ "nofollow&quot;</a> qui empêche certains moteurs de recherche d'aspirer "
+#~ "les liens suivis."
+
+#~ msgid "A default title must be provided if the title is a static value"
+#~ msgstr ""
+#~ "Un titre pas défaut doit être fourni si le titre est une valeur statique"
+
+#~ msgid "Link URL"
+#~ msgstr "Url du Lien"
+
+#, fuzzy
+#~ msgid ""
+#~ "The following placeholder tokens can be used in both titles and URLs. "
+#~ "When used in a URL or title, they will be replaced with the appropriate "
+#~ "values."
+#~ msgstr ""
+#~ "Les ébauches de jetons suivantes peuvent être utilisées à la fois dans "
+#~ "les titres et dans les URL. Lorsqu'elles sont utilisées dans une URL ou "
+#~ "un titre, elles seront remplacées par les valeurs appropriées."
+
+#~ msgid "More Links"
+#~ msgstr "Plus de Liens"
+
+#~ msgid "Default, as link with title"
+#~ msgstr "Par défaut, comme lien avec titre"
+
+#~ msgid "Plain, as the text URL"
+#~ msgstr "Plat, comme l'URL texte"
+
+#~ msgid "Short, as link with title \"Link\""
+#~ msgstr "Court, comme lien avec le titre \"Lien\""
+
+#~ msgid "Label, as link with label as title"
+#~ msgstr "Etiquette, comme lien avec l'étiquette comme titre"
+
+#~ msgid "Link"
+#~ msgstr "Lien"
+
+#~ msgid "link"
+#~ msgstr "lien"
