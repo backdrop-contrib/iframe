@@ -121,7 +121,7 @@ function iframe_field_settings($op, $field) {
       $form['attributes']['frameborder'] = array(
         '#type' => 'textfield',
         '#title' => t('Frameborder'),
-        '#description' => t('Frameborder is the border arround the iframe. Mostly people want it silent, so the default value fpr frameborder is 0.'),
+        '#description' => t('Frameborder is the border arround the iframe. Mostly people want it silent, so the default value for frameborder is 0.'),
         '#default_value' => empty($field['attributes']['frameborder']) ? '0' : $field['attributes']['frameborder'],
         '#maxlength' => 2,
         '#size' => 2,
