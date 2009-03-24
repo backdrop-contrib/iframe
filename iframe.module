@@ -34,6 +34,7 @@ function iframe_field_info() {
 
 /**
  * Implementation of hook_field_settings().
+ * shown: at general setup of this field type on a content type
  */
 function iframe_field_settings($op, $field) {
   dmsg(3,'func iframe_field_settings op='.$op);
@@ -97,20 +98,8 @@ function iframe_field_settings($op, $field) {
         '#tree' => true,
       );
 
-      $target_options = array(
-        'default' => t('Default (no target attribute)'),
-        '_top' => t('Open search in window root'),
-        '_blank' => t('Open search in new window'),
-        'user' => t('Allow the user to choose'),
-      );
       $form['attributes'] = array(
         '#tree' => true,
-      );
-      $form['attributes']['target'] = array(
-        '#type' => 'radios',
-        '#title' => t('IFrame Target'),
-        '#default_value' => empty($field['attributes']['target']) ? 'default' : $field['attributes']['target'],
-        '#options' => $target_options,
       );
       $form['attributes']['class'] = array(
         '#type' => 'textfield',
@@ -138,7 +127,7 @@ function iframe_field_settings($op, $field) {
         '#type' => 'textfield',
         '#title' => t('height of the iframe'),
         '#description' => t('iframes need fix width and height, only numbers are allowed.'),
-        '#default_value' => empty($field['attributes']['height']) ? '1000' : $field['attributes']['height'],
+        '#default_value' => empty($field['attributes']['height']) ? '700' : $field['attributes']['height'],
         '#maxlength' => 4,
         '#size' => 4,
       );
@@ -161,7 +150,7 @@ function iframe_field_settings($op, $field) {
 
     case 'database columns':
       return array(
-        'url' => array('type' => 'varchar', 'length' => 255, 'not null' => FALSE, 'sortable' => TRUE),
+        'url' => array('type' => 'varchar', 'length' => 1024, 'not null' => FALSE, 'sortable' => TRUE),
         'title' => array('type' => 'varchar', 'length' => 255, 'not null' => FALSE, 'sortable' => TRUE),
         'attributes' => array('type' => 'text', 'size' => 'medium', 'not null' => FALSE),
       );
@@ -244,7 +233,7 @@ function iframe_widget_info() {
   dmsg(3,'func iframe_widget_info');
   return array(
     'iframe' => array(
-      'label' => 'Text Fields for Title and iframe-url',
+      'label' => 'Text Fields for Title and IFrame-url',
       'field types' => array('iframe'),
       'multiple values' => CONTENT_HANDLE_CORE,
     ),
@@ -276,10 +265,6 @@ function _iframe_load(&$item, $delta = 0) {
 
 function _iframe_process(&$item, $delta = 0, $field, $node) {
   dmsg(3,'func _iframe_process');
-  // Remove the target attribute if not selected.
-  if (!$item['attributes']['target'] || $item['attributes']['target'] == "default") {
-    unset($item['attributes']['target']);
-  }
   // Trim whitespace from url.
   $item['url'] = trim($item['url']);
   // numbers should be numbers
@@ -392,16 +377,16 @@ function _iframe_sanitize(&$item, $delta, &$field, &$node) {
   $attributes = array();
   if (!empty($item['attributes']) && is_array($item['attributes'])) {
     foreach($item['attributes'] as $attribute => $attbvalue) {
-      if (isset($item['attributes'][$attribute]) && ($field['attributes'][$attribute] == 'user' || $attribute=='width' || $attribute=='height')) {
+      if (isset($attbvalue) && ($field['attributes'][$attribute] == 'user' || $attribute=='width' || $attribute=='height')) {
         $attributes[$attribute] = $attbvalue;
-       }
-     }
-   }
-  // Add attributes defined at the field level
+      }
+    }
+  }
+  // Add attributes defined at the field level, if not set
   if (is_array($field['attributes'])) {
     foreach($field['attributes'] as $attribute => $attbvalue) {
       if (!empty($attbvalue) && $attbvalue != 'default' && $attbvalue != 'user'
-&& (!isset($attributes[$attribute]) || (isset($attributes[$attribute]) && ($attribute=='width' || $attribute=='height'))) ) {
+          && !isset($attributes[$attribute]) ) {
         $attributes[$attribute] = $attbvalue;
       }
     }
@@ -474,14 +459,15 @@ function theme_iframe($element) {
   $output .= '<div class="iframe-field-url' . (isset($element['title']) ? ' iframe-field-column' : '') . '">' . theme('textfield', $element['url']) . '</div>';
 
   $output .= '<div>'.t('Width and Height of the IFrame').'</div>';
-  $output .= '<div class="iframe-field-width iframe-field-column">' . theme('textfield', $element['attributes']['width']) . '</div>';
-  $output .= '<div class="iframe-field-height iframe-field-column">' . theme('textfield', $element['attributes']['height']) . '</div>';
 
-  $output .= '</div>';
 
   if (!empty($element['attributes'])) {
-    $output .= '<div class="iframe-attributes">' . theme('form_element', $element['attributes'], $element['attributes']['#value']) . '</div>';
+    foreach($element['attributes'] as $attr) {
+      $output .= '<div class="iframe-attributes iframe-field-column">' . theme($attr['#type'], $attr, $attr['#value']) . '</div>';
+    }
   }
+  $output .= '</div>';
+
   return $output;
 }
 
@@ -517,7 +503,7 @@ function iframe_process($element, $edit, $form_state, $form) {
 
    $element['url'] = array(
      '#type' => 'textfield',
-     '#maxlength' => '255',
+     '#maxlength' => '1024',
      '#title' => t('URL'),
      '#description' => $element['#description'],
      '#required' => ($delta == 0 && $field['url'] !== 'optional') ? $element['#required'] : FALSE,
@@ -548,13 +534,6 @@ function iframe_process($element, $edit, $form_state, $form) {
      '#required' => ($delta == 0 && $field['height'] == 'required') ? $field['required'] : FALSE,
      '#default_value' => !empty($element['#value']['attributes']['height'])? $element['#value']['attributes']['height'] : $field['attributes']['height'],
    );
-   if (!empty($field['attributes']['target']) && $field['attributes']['target'] == 'user') {
-     $element['attributes']['target'] = array(
-       '#type' => 'checkbox',
-       '#title' => t('Open URL in a New Window'),
-       '#return_value' => "_blank",
-     );
-   }
    return $element;
 }
 
@@ -736,8 +715,9 @@ function iframe_validate_url($text) {
  * validate size: width and height of an iframe
 */
 function iframe_validate_size($size,$default="100") {
-  dmsg(3,'func iframe_validate_size');
-  if (is_numeric($size)) return $size;
+  dmsg(3,'func iframe_validate_size (size='.$size.', default='.$default);
+  if (is_numeric($size))
+    return $size>0? $size : $default;
   if (preg_match('/^\d+\%$/',$size)) return $size;
   return $default;
 }
@@ -746,8 +726,9 @@ function iframe_validate_size($size,$default="100") {
  * like central function
  * form the iframe code
 */
-function iframe_iframe($text, $path, $options = array()) {
+function iframe_iframe($text, $path, $options=FALSE) {
   dmsg(3,'func iframe_iframe');
+  if (!$options) $options=array();
   // Merge in defaults.
 //error_log('IFIF options='.implode(" ++ ",explode("\n",print_r($options,TRUE))));
   $options += array(
@@ -755,7 +736,7 @@ function iframe_iframe($text, $path, $options = array()) {
       'html' => FALSE,
     );
   if (!isset($options['attributes']['width'])) $options['attributes']['width']='100%';
-  if (!isset($options['attributes']['height'])) $options['attributes']['height']='1000';
+  if (!isset($options['attributes']['height'])) $options['attributes']['height']='701';
   if (!isset($options['attributes']['frameborder']) || !is_numeric($options['attributes']['frameborder'])) $options['attributes']['frameborder']='0';
 
   $htmlid='';
@@ -776,11 +757,15 @@ function iframe_iframe($text, $path, $options = array()) {
   if (isset($options['attributes']['title']) && strpos($options['attributes']['title'], '<') !== FALSE) {
     $options['attributes']['title'] = strip_tags($options['attributes']['title']);
   }
+  $optionsLink==array(); $optionsLink['attributes']=array();
+  $optionsLink['attributes']['title'] = $options['attributes']['title'];
+
+  include_once(drupal_get_path('module', 'content') .'/includes/content.crud.inc');
 
   return (empty($text)? '' : '<div class="iframe_title">'.($options['html'] ? $text : check_plain($text)).'</div>').
     '<iframe src="'. check_url(url($path, $options)) .'"'. drupal_attributes($options['attributes']) .
     $htmlid.
     '>'.
-    t('Your browser does not support iframes. But You can use the following link.').' '.l('Link',$path,$options).'</iframe>';
+    t('Your browser does not support iframes. But You can use the following link.').' '.l('Link',$path,$optionsLink).'</iframe>';
 }
 
