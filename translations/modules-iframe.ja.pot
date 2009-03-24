@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Drupal 6.x\n"
-"POT-Creation-Date: 2008-11-09 22:27+0100\n"
+"POT-Creation-Date: 2009-03-25 00:47+0100\n"
 "PO-Revision-Date: 2008-05-01 16:49+0900\n"
 "Last-Translator: 0829 <hixarg+0829@gmail.com>\n"
 "Language-Team: DRUPAL*DRUPAL <hixarg+0829@gmail.com>\n"
@@ -17,88 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-
-#: iframe.views.inc:17
-msgid "@label url"
-msgstr ""
-
-#: iframe.views.inc:23;56;73
-msgid "Content"
-msgstr ""
-
-#: iframe.views.inc:24;37
-msgid "@label title"
-msgstr ""
-
-#: iframe.views.inc:57;61
-#, fuzzy
-msgid "@label protocol"
-msgstr "プロトコル"
-
-#: iframe.views.inc:74;78
-msgid "@label target"
-msgstr ""
-
-#: iframe.views.inc:110
-msgid "Is one of"
-msgstr ""
-
-#: iframe.views.inc:144
-msgid "Protocol"
-msgstr "プロトコル"
-
-#: iframe.views.inc:149
-msgid ""
-"The protocols displayed here are those globally available. You may add more "
-"protocols by modifying the <em>filter_allowed_protocols</em> variable in "
-"your installation."
-msgstr ""
-
-#: iframe.views.inc:211 iframe.module:518
-msgid "Title"
-msgstr "タイトル"
-
-#: iframe.views.inc:213
-msgid ""
-"The title to use when this argument is present; it will override the title "
-"of the view and titles from previous arguments. You can use percent "
-"substitution here to replace with argument titles. Use \"%1\" for the first "
-"argument, \"%2\" for the second, etc."
-msgstr ""
-
-#: iframe.views.inc:226
-msgid "Action to take if argument is not present"
-msgstr ""
-
-#: iframe.views.inc:238
-msgid "Wildcard"
-msgstr ""
-
-#: iframe.views.inc:241
-msgid ""
-"If this value is received as an argument, the argument will be ignored; i.e, "
-"\"all values\""
-msgstr ""
-
-#: iframe.views.inc:247
-msgid "Wildcard title"
-msgstr ""
-
-#: iframe.views.inc:250
-msgid "The title to use for the wildcard in substitutions elsewhere."
-msgstr ""
-
-#: iframe.views.inc:273
-msgid "Validator"
-msgstr ""
-
-#: iframe.views.inc:277
-msgid "<Basic validation>"
-msgstr ""
-
-#: iframe.views.inc:313
-msgid "Action to take if argument does not validate"
-msgstr ""
 
 #: iframe.module:29 iframe.info:0
 msgid "IFrame"
@@ -112,12 +30,12 @@ msgstr ""
 "リンクを作成するために title, href およびその他の属性をデータベースに保存しま"
 "す。"
 
-#: iframe.module:48
+#: iframe.module:49
 #, fuzzy
 msgid "Optional url"
 msgstr "タイトルオプション"
 
-#: iframe.module:51
+#: iframe.module:52
 #, fuzzy
 msgid ""
 "If checked, the url field is optional. If the url is ommitted, nothing will "
@@ -127,28 +45,28 @@ msgstr ""
 "が可能になります。 URL が省略された場合タイトルはプレーンテキストとして表示さ"
 "れます。"
 
-#: iframe.module:55
+#: iframe.module:56
 msgid "Optional Title"
 msgstr "タイトルオプション"
 
-#: iframe.module:56
+#: iframe.module:57
 msgid "Required Title"
 msgstr "タイトル必須"
 
-#: iframe.module:57
+#: iframe.module:58
 msgid "Static Title: "
 msgstr "タイトル固定"
 
-#: iframe.module:58
+#: iframe.module:59
 msgid "No Title"
 msgstr "タイトルなし"
 
-#: iframe.module:63
+#: iframe.module:64
 #, fuzzy
 msgid "IFrame Title"
 msgstr "タイトル必須"
 
-#: iframe.module:66
+#: iframe.module:67
 #, fuzzy
 msgid ""
 "If the iframe title is optional or required, a field will be displayed to "
@@ -164,11 +82,11 @@ msgstr ""
 "</a>がインストールされていれば固定タイトルに他のフィールドの内容を利用するこ"
 "とができます。"
 
-#: iframe.module:81
+#: iframe.module:82
 msgid "Placeholder tokens"
 msgstr "プレースホルダートークン"
 
-#: iframe.module:82
+#: iframe.module:83
 msgid ""
 "The following placeholder tokens can be used in both paths and titles. When "
 "used in a path or title, they will be replaced with the appropriate values."
@@ -176,12 +94,12 @@ msgstr ""
 "タイトルと URL の両方で、以下のトークン構文が使用できます。 使用されたトーク"
 "ン構文は適切な値に置換されます。"
 
-#: iframe.module:90
+#: iframe.module:91
 #, fuzzy
 msgid "Allow user-entered tokens"
 msgstr "トークンの許可"
 
-#: iframe.module:92
+#: iframe.module:93
 msgid ""
 "Checking will allow users to enter tokens in URLs and Titles on the node "
 "edit form. This does not affect the field settings on this page."
@@ -189,33 +107,11 @@ msgstr ""
 "有効にした場合、コンテンツの編集時にトークンを利用したタイトルや URL を設定で"
 "きるようになります。 このページのフィールド設定には影響を及ぼしません。"
 
-#: iframe.module:101
-msgid "Default (no target attribute)"
-msgstr "デフォルト（target 属性を使用しない）"
-
-#: iframe.module:102
-#, fuzzy
-msgid "Open search in window root"
-msgstr "ルートウィンドウに表示（_top）"
-
-#: iframe.module:103
-#, fuzzy
-msgid "Open search in new window"
-msgstr "新しいウィンドウに表示（_blank）"
-
-#: iframe.module:104
-msgid "Allow the user to choose"
-msgstr "ユーザによる選択を許可"
-
-#: iframe.module:111
-msgid "IFrame Target"
-msgstr ""
-
-#: iframe.module:117
+#: iframe.module:106
 msgid "Additional CSS Class"
 msgstr "CSS クラスの追加"
 
-#: iframe.module:118
+#: iframe.module:107
 #, fuzzy
 msgid ""
 "When output, this iframe will have this class attribute. Multiple classes "
@@ -224,88 +120,102 @@ msgstr ""
 "出力時にリンクに class 属性を持たせることができます。 複数のクラスを追加した"
 "い場合はスペースで区切って入力してください。"
 
-#: iframe.module:123
+#: iframe.module:112
+msgid "Frameborder"
+msgstr ""
+
+#: iframe.module:113
+msgid ""
+"Frameborder is the border arround the iframe. Mostly people want it silent, "
+"so the default value for frameborder is 0."
+msgstr ""
+
+#: iframe.module:120
 msgid "width of the iframe"
 msgstr ""
 
-#: iframe.module:124;132
+#: iframe.module:121;129
 msgid "iframes need fix width and height, only numbers are allowed."
 msgstr ""
 
-#: iframe.module:131
+#: iframe.module:128
 msgid "height of the iframe"
 msgstr ""
+
+#: iframe.module:138
+msgid "A default title must be provided if the title is a static value"
+msgstr "固定タイトルを使用する場合、デフォルトタイトルの設定が必要です。"
 
 #: iframe.module:141;144
 msgid "A default width and height must be provided."
 msgstr ""
 
-#: iframe.module:213
+#: iframe.module:211
 msgid "At least one title or URL must be entered."
 msgstr "少なくとも1つのタイトルまたは URL を入力する必要があります。"
 
-#: iframe.module:296
+#: iframe.module:290
 #, fuzzy
-msgid "Not a valid url-iframe."
+msgid "Not a valid iframe-url."
 msgstr "有効な URL ではありません。"
 
-#: iframe.module:300
+#: iframe.module:294
 #, fuzzy
 msgid "Titles are required for all iframes."
 msgstr "すべてのリンクにタイトルを設定する必要があります。"
 
-#: iframe.module:305
+#: iframe.module:299
 #, fuzzy
 msgid "You cannot enter a title without a iframe url."
 msgstr ""
 "リンク URL が設定されていないため、タイトルを入力することはできません。"
 
-#: iframe.module:462
+#: iframe.module:461
 msgid "Width and Height of the IFrame"
 msgstr ""
 
-#: iframe.module:509
+#: iframe.module:507
 msgid "URL"
 msgstr "URL"
 
-#: iframe.module:527
+#: iframe.module:516 views/iframe_views_handler_argument_target.inc:26
+msgid "Title"
+msgstr "タイトル"
+
+#: iframe.module:525
 msgid "Width"
 msgstr ""
 
-#: iframe.module:535
+#: iframe.module:533
 msgid "Height"
 msgstr ""
 
-#: iframe.module:542
-msgid "Open URL in a New Window"
-msgstr "新しいウィンドウで開く"
-
-#: iframe.module:556
+#: iframe.module:547
 msgid "Title, over iframe (default)"
 msgstr ""
 
-#: iframe.module:561
+#: iframe.module:552
 msgid "IFrame without title"
 msgstr ""
 
-#: iframe.module:566
+#: iframe.module:557
 msgid "IFrame url as plain url"
 msgstr ""
 
-#: iframe.module:611
+#: iframe.module:602
 msgid "iframe URL"
 msgstr ""
 
-#: iframe.module:612
+#: iframe.module:603
 #, fuzzy
 msgid "iframe title"
 msgstr "タイトル必須"
 
-#: iframe.module:613
+#: iframe.module:604
 msgid "Formatted html iframe"
 msgstr ""
 
-#: iframe.module:761
+#: iframe.module:769
 msgid ""
 "Your browser does not support iframes. But You can use the following link."
 msgstr ""
@@ -322,6 +232,105 @@ msgstr "シンプルなリンク用のフィールドタイプを定義します
 #: iframe.info:0
 msgid "CCK"
 msgstr "CCK"
+
+#: views/iframe.views.inc:37
+msgid "@label IFRAME-URL"
+msgstr ""
+
+#: views/iframe.views.inc:43;76;93
+msgid "Content"
+msgstr ""
+
+#: views/iframe.views.inc:44;57
+msgid "@label title"
+msgstr ""
+
+#: views/iframe.views.inc:77;81
+#, fuzzy
+msgid "@label protocol"
+msgstr "プロトコル"
+
+#: views/iframe.views.inc:94;98
+msgid "@label target"
+msgstr ""
+
+#: views/iframe_views_handler_argument_target.inc:28
+msgid ""
+"The title to use when this argument is present; it will override the title "
+"of the view and titles from previous arguments. You can use percent "
+"substitution here to replace with argument titles. Use \"%1\" for the first "
+"argument, \"%2\" for the second, etc."
+msgstr ""
+
+#: views/iframe_views_handler_argument_target.inc:41
+msgid "Action to take if argument is not present"
+msgstr ""
+
+#: views/iframe_views_handler_argument_target.inc:53
+msgid "Wildcard"
+msgstr ""
+
+#: views/iframe_views_handler_argument_target.inc:56
+msgid ""
+"If this value is received as an argument, the argument will be ignored; i.e, "
+"\"all values\""
+msgstr ""
+
+#: views/iframe_views_handler_argument_target.inc:62
+msgid "Wildcard title"
+msgstr ""
+
+#: views/iframe_views_handler_argument_target.inc:65
+msgid "The title to use for the wildcard in substitutions elsewhere."
+msgstr ""
+
+#: views/iframe_views_handler_argument_target.inc:88
+msgid "Validator"
+msgstr ""
+
+#: views/iframe_views_handler_argument_target.inc:92
+msgid "<Basic validation>"
+msgstr ""
+
+#: views/iframe_views_handler_argument_target.inc:128
+msgid "Action to take if argument does not validate"
+msgstr ""
+
+#: views/iframe_views_handler_filter_protocol.inc:24
+msgid "Is one of"
+msgstr ""
+
+#: views/iframe_views_handler_filter_protocol.inc:25
+msgid "="
+msgstr ""
+
+#: views/iframe_views_handler_filter_protocol.inc:58
+msgid "Protocol"
+msgstr "プロトコル"
+
+#: views/iframe_views_handler_filter_protocol.inc:63
+msgid ""
+"The protocols displayed here are those globally available. You may add more "
+"protocols by modifying the <em>filter_allowed_protocols</em> variable in "
+"your installation."
+msgstr ""
+
+#~ msgid "Default (no target attribute)"
+#~ msgstr "デフォルト（target 属性を使用しない）"
+
+#, fuzzy
+#~ msgid "Open search in window root"
+#~ msgstr "ルートウィンドウに表示（_top）"
+
+#, fuzzy
+#~ msgid "Open search in new window"
+#~ msgstr "新しいウィンドウに表示（_blank）"
+
+#~ msgid "Allow the user to choose"
+#~ msgstr "ユーザによる選択を許可"
+
+#~ msgid "Open URL in a New Window"
+#~ msgstr "新しいウィンドウで開く"
 
 #~ msgid "Link"
 #~ msgstr "リンク"
@@ -360,9 +369,6 @@ msgstr "CCK"
 #~ "つかのサーチエンジンに対してリンクを集計の対象に含めないようにするための "
 #~ "<a href=\"http://en.wikipedia.org/wiki/Nofollow\">rel=&quot;nofollow&quot;"
 #~ "</a> があります。"
-
-#~ msgid "A default title must be provided if the title is a static value"
-#~ msgstr "固定タイトルを使用する場合、デフォルトタイトルの設定が必要です。"
 
 #~ msgid "Link URL"
 #~ msgstr "リンク URL"
