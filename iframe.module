@@ -766,6 +766,6 @@ function iframe_iframe($text, $path, $options=FALSE) {
     '<iframe src="'. check_url(url($path, $options)) .'"'. drupal_attributes($options['attributes']) .
     $htmlid.
     '>'.
-    t('Your browser does not support iframes. But You can use the following link.').' '.l('Link',$path,$optionsLink).'</iframe>';
+    t('Your browser does not support iframes. But You can use the following link.').' '.l('Link',check_url(url($path,$options)),$optionsLink).'</iframe>';
 }
 
