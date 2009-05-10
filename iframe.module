@@ -107,14 +107,6 @@ function iframe_field_settings($op, $field) {
         '#description' => t('When output, this iframe will have this class attribute. Multiple classes should be separated by spaces.'),
         '#default_value' => empty($field['attributes']['class']) ? '' : $field['attributes']['class'],
       );
-      $form['attributes']['frameborder'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Frameborder'),
-        '#description' => t('Frameborder is the border arround the iframe. Mostly people want it silent, so the default value for frameborder is 0.'),
-        '#default_value' => empty($field['attributes']['frameborder']) ? '0' : $field['attributes']['frameborder'],
-        '#maxlength' => 2,
-        '#size' => 2,
-      );
       $form['attributes']['width'] = array(
         '#type' => 'textfield',
         '#title' => t('width of the iframe'),
@@ -130,6 +122,20 @@ function iframe_field_settings($op, $field) {
         '#default_value' => empty($field['attributes']['height']) ? '700' : $field['attributes']['height'],
         '#maxlength' => 4,
         '#size' => 4,
+      );
+      $form['attributes']['frameborder'] = array(
+        '#type' => 'select',
+        '#title' => t('Frameborder'),
+        '#options' => array( '0' => t('no frameborder'), 'yes' => t('show frameborder') ),
+        '#default_value' => empty($field['attributes']['frameborder']) ? '0' : $field['attributes']['frameborder'],
+        '#description' => t('Frameborder is the border arround the iframe. Mostly people want it silent, so the default value for frameborder is 0 = no.'),
+      );
+      $form['attributes']['scrolling'] = array(
+        '#type' => 'select',
+        '#title' => t('Scrolling'),
+        '#options' => array( 'auto' => t('Scrolling automatic'), 'no' => t('Scrolling disabled'), 'yes' => t('Scrolling enabled') ),
+        '#default_value' => empty($field['attributes']['scrolling']) ? 'auto' : $field['attributes']['scrolling'],
+        '#description' => t('Scrollbars help the user to reach all iframe content despite the real height of the iframe content. Please disable it only if You know what You are doing.'),
       );
       return $form;
 
@@ -377,7 +383,7 @@ function _iframe_sanitize(&$item, $delta, &$field, &$node) {
   $attributes = array();
   if (!empty($item['attributes']) && is_array($item['attributes'])) {
     foreach($item['attributes'] as $attribute => $attbvalue) {
-      if (isset($attbvalue) && ($field['attributes'][$attribute] == 'user' || $attribute=='width' || $attribute=='height')) {
+      if (isset($attbvalue) && ($field['attributes'][$attribute] == 'user' || $attribute=='width' || $attribute=='height' || $attribute=='frameborder' || $attribute=='scrolling')) {
         $attributes[$attribute] = $attbvalue;
       }
     }
@@ -533,6 +539,22 @@ function iframe_process($element, $edit, $form_state, $form) {
      '#title' => t('Height'),
      '#required' => ($delta == 0 && $field['height'] == 'required') ? $field['required'] : FALSE,
      '#default_value' => !empty($element['#value']['attributes']['height'])? $element['#value']['attributes']['height'] : $field['attributes']['height'],
+   );
+   $element['attributes']['frameborder'] = array(
+     '#type' => 'select',
+     '#title' => t('Frameborder'),
+     '#options' => array( '0' => t('no frameborder'), 'yes' => t('show frameborder') ),
+     '#description' => t('Frameborder is the border arround the iframe. Mostly people want it silent, so the default value for frameborder is 0.'),
+     '#required' => ($delta == 0 && $field['frameborder'] == 'required') ? $field['required'] : FALSE,
+     '#default_value' => !empty($element['#value']['attributes']['frameborder'])? $element['#value']['attributes']['frameborder'] : $field['attributes']['frameborder'],
+   );
+   $element['attributes']['scrolling'] = array(
+     '#type' => 'select',
+     '#title' => t('Scrolling'),
+     '#options' => array( 'auto' => t('Scrolling automatic'), 'no' => t('Scrolling disabled'), 'yes' => t('Scrolling enabled') ),
+     '#description' => t('Scrollbars help the user to reach all iframe content despite the real height of the iframe content. Please disable it only if You know what You are doing.'),
+     '#required' => ($delta == 0 && $field['scrolling'] == 'required') ? $field['required'] : FALSE,
+     '#default_value' => !empty($element['#value']['attributes']['scrolling'])? $element['#value']['attributes']['scrolling'] : $field['attributes']['scrolling'],
    );
    return $element;
 }
@@ -737,7 +759,8 @@ function iframe_iframe($text, $path, $options=FALSE) {
     );
   if (!isset($options['attributes']['width'])) $options['attributes']['width']='100%';
   if (!isset($options['attributes']['height'])) $options['attributes']['height']='701';
-  if (!isset($options['attributes']['frameborder']) || !is_numeric($options['attributes']['frameborder'])) $options['attributes']['frameborder']='0';
+  if (!isset($options['attributes']['frameborder']) || empty($options['attributes']['frameborder'])) $options['attributes']['frameborder']='0';
+  if (!isset($options['attributes']['scrolling']) || empty($options['attributes']['scrolling'])) $options['attributes']['scrolling']='auto';
 
   $htmlid='';
   if (isset($options['html-id']) && !empty($options['html-id'])) $htmlid=' id="'.$options['html-id'].'" name="'.$options['html-id'].'"';
