@@ -436,6 +436,9 @@ function iframe_theme() {
     'iframe_formatter_asurl' => array(
       'arguments' => array('element' => NULL),
     ),
+    'iframe_formatter_asurl_withuri' => array(
+      'arguments' => array('element' => NULL),
+    ),
     'iframe' => array(
       'arguments' => array('element' => NULL),
     ),
@@ -581,7 +584,12 @@ function iframe_field_formatter_info() {
       'multiple values' => CONTENT_HANDLE_CORE,
     ),
     'asurl' => array(
-      'label' => t('IFrame url as plain url'),
+      'label' => t('A link with the given title'),
+      'field types' => array('iframe'),
+      'multiple values' => CONTENT_HANDLE_CORE,
+    ),
+    'asurl_withuri' => array(
+      'label' => t('A link with the iframe uri'),
       'field types' => array('iframe'),
       'multiple values' => CONTENT_HANDLE_CORE,
     ),
@@ -618,7 +626,20 @@ function theme_iframe_formatter_asurl($element) {
   // If no url given display nothing.
   if (empty($element['#item']['url'])) return '';
   // Display all
-  return l($element['#item']['display_title'], $element['#item']['url'], $element['#item']);
+  $linktext = empty($element['#item']['display_title'])? $element['#item']['url'] : $element['#item']['display_title'];
+  return l($linktext, $element['#item']['url'], $element['#item']);
+}
+
+/**
+ * Theme function for 'asurl_withuri' text field formatter.
+ */
+function theme_iframe_formatter_asurl_withuri($element) {
+  dmsg(3,'func theme_iframe_formatter_asurl_withuri');
+  // If no url given display nothing.
+  if (empty($element['#item']['url'])) return '';
+  // Display all
+  $linktext = $element['#item']['url'];
+  return l($linktext, $element['#item']['url'], $element['#item']);
 }
 
 function iframe_token_list($type = 'all') {
