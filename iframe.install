@@ -36,8 +36,8 @@ function iframe_disable() {
 function iframe_update_1() {
   $ret = array();
 
-  include_once(drupal_get_path('module', 'content') .'/content.module');
-  include_once(drupal_get_path('module', 'content') .'/includes/content.admin.inc');
+  include_once(drupal_get_path('module', 'content') . '/content.module');
+  include_once(drupal_get_path('module', 'content') . '/includes/content.admin.inc');
 
   $fields = content_fields();
 
@@ -62,39 +62,41 @@ function iframe_update_1() {
 
         $db_info = content_database_info($field);
         if ($field['multiple']) {
-          $ret[] = update_sql('INSERT INTO {'. $db_info['table'] .'} (vid, delta, nid, '.
-		$field['field_name'] .'_url, '.
-		$field['field_name'] .'_title, '.
-		$field['field_name'] ."_attributes) '.
-		'SELECT vid, delta, nid, '.
-		'field_url, '
-		'field_title, '.
-		'attributes FROM {node_field_iframe_data} '.
-		'WHERE field_name = '". $field['field_name'] ."'");
+          $ret[] = update_sql('INSERT INTO {' . $db_info['table'] . '} (vid, delta, nid, ' .
+            $field['field_name'] .'_url, ' .
+            $field['field_name'] .'_title, ' .
+            $field['field_name'] .'_attributes) ' .
+            'SELECT vid, delta, nid, ' .
+            'field_url, ' .
+            'field_title, ' .
+            'attributes FROM {node_field_iframe_data} ' .
+            'WHERE field_name = "' . $field['field_name'] . '"');
         }
         else {
-          $ret[] = update_sql('UPDATE {'. $db_info['table'] .'} c, {node_field_iframe_data} l SET '.
-		'c.'. $field['field_name'] .'_url = l.field_url, '.
-		'c.'. $field['field_name'] .'_title = l.field_title, '.
-		'c.'. $field['field_name'] ."_attributes = l.attributes '.
-		'WHERE l.field_name = '". $field['field_name'] ."' AND c.vid = l.vid AND c.nid = l.nid");
+          $ret[] = update_sql('UPDATE {' . $db_info['table'] . '} c, {node_field_iframe_data} l SET ' .
+            'c.' . $field['field_name'] . '_url = l.field_url, ' .
+            'c.' . $field['field_name'] . '_title = l.field_title, ' .
+            'c.' . $field['field_name'] . '_attributes = l.attributes ' .
+            'WHERE l.field_name = "' . $field['field_name'] . '" AND c.vid = l.vid AND c.nid = l.nid');
         }
     }
   }
 
   //$ret[] = update_sql('DROP TABLE {node_field_iframe_data}');
-  $ret[] = update_sql('SELECT 1=1');
 
-  db_query('DELETE FROM {cache}');
+  $ret[] = update_sql('DELETE FROM {cache}');
   return $ret;
 }
 
+/**
+ * Increase size of url-field to 1024 chars
+*/
 function iframe_update_6010() {
   $ret = array();
 
-  include_once(drupal_get_path('module', 'content') .'/content.module');
-  include_once(drupal_get_path('module', 'content') .'/includes/content.admin.inc');
-  include_once(drupal_get_path('module', 'content') .'/includes/content.crud.inc');
+  include_once(drupal_get_path('module', 'content') . '/content.module');
+  include_once(drupal_get_path('module', 'content') . '/includes/content.admin.inc');
+  include_once(drupal_get_path('module', 'content') . '/includes/content.crud.inc');
 
   /* 1. update the general settings for iframe-field */
   $fields = content_fields();
@@ -106,11 +108,10 @@ function iframe_update_6010() {
         $field['columns']['url']['length'] = 1024;
 
         content_field_instance_update($field);
-        $ret[] = update_sql('#growing url field to 1024 chars');
     }
   }
 
-  db_query('DELETE FROM {cache}');
+  $ret[] = update_sql('DELETE FROM {cache}');
   return $ret;
 }
 
