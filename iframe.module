@@ -19,7 +19,9 @@ if (!defined('DEBUG_LEVEL')) {
 }
 if (!function_exists('dmsg')) {
   function dmsg($level, $text) {
-    if ($level <= DEBUG_LEVEL) error_log('iframe(' . $level . '): ' . $text);
+    if ($level <= DEBUG_LEVEL) {
+      error_log('iframe(' . $level . '): ' . $text);
+    }
   }
 }
 /**
@@ -129,14 +131,14 @@ function iframe_field_settings($op, $field) {
       $form['attributes']['frameborder'] = array(
         '#type' => 'select',
         '#title' => t('Frameborder'),
-        '#options' => array( '0' => t('no frameborder'), 'yes' => t('show frameborder') ),
+        '#options' => array('0' => t('no frameborder'), 'yes' => t('show frameborder')),
         '#default_value' => empty($field['attributes']['frameborder']) ? '0' : $field['attributes']['frameborder'],
         '#description' => t('Frameborder is the border arround the iframe. Mostly people want it silent, so the default value for frameborder is 0 = no.'),
       );
       $form['attributes']['scrolling'] = array(
         '#type' => 'select',
         '#title' => t('Scrolling'),
-        '#options' => array( 'auto' => t('Scrolling automatic'), 'no' => t('Scrolling disabled'), 'yes' => t('Scrolling enabled') ),
+        '#options' => array('auto' => t('Scrolling automatic'), 'no' => t('Scrolling disabled'), 'yes' => t('Scrolling enabled')),
         '#default_value' => empty($field['attributes']['scrolling']) ? 'auto' : $field['attributes']['scrolling'],
         '#description' => t('Scrollbars help the user to reach all iframe content despite the real height of the iframe content. Please disable it only if You know what You are doing.'),
       );
@@ -263,7 +265,9 @@ function iframe_widget(&$form, &$form_state, $field, $items, $delta = 0) {
 function _iframe_load(&$item, $delta = 0) {
   dmsg(3, 'func _iframe_load');
   // Unserialize the attributes array.
-  if (!is_array($item['attributes'])) $item['attributes'] = unserialize($item['attributes']);
+  if (!is_array($item['attributes'])) {
+    $item['attributes'] = unserialize($item['attributes']);
+  }
 }
 
 function _iframe_process(&$item, $delta = 0, $field, $node) {
@@ -305,7 +309,7 @@ function _iframe_validate(&$item, $delta, $field, $node, &$optional_field_found)
     form_set_error($field['field_name'] . '][' . $delta . '][url', t('You cannot enter a title without a iframe url.'));
   }
   // In a totally bizzaro case, where URLs and titles are optional but the field is required, ensure there is at least one iframe.
-  if ($field['url'] == 'optional' && $field['title'] == 'optional' && ( !empty($trimmed_title) || !empty($trimmed_url) )) {
+  if ($field['url'] == 'optional' && $field['title'] == 'optional' && (!empty($trimmed_title) || !empty($trimmed_url))) {
     $optional_field_found = TRUE;
   }
 }
@@ -385,7 +389,7 @@ function _iframe_sanitize(&$item, $delta, &$field, &$node) {
   $attributes = array();
   if (!empty($item['attributes']) && is_array($item['attributes'])) {
     foreach ($item['attributes'] as $attribute => $attbvalue) {
-      if (isset($attbvalue) && ($field['attributes'][$attribute] == 'user' || $attribute=='width' || $attribute=='height' || $attribute=='frameborder' || $attribute=='scrolling')) {
+      if (isset($attbvalue) && ($field['attributes'][$attribute] == 'user' || $attribute == 'width' || $attribute == 'height' || $attribute == 'frameborder' || $attribute == 'scrolling')) {
         $attributes[$attribute] = $attbvalue;
       }
     }
@@ -393,8 +397,7 @@ function _iframe_sanitize(&$item, $delta, &$field, &$node) {
   // Add attributes defined at the field level, if not set
   if (is_array($field['attributes'])) {
     foreach ($field['attributes'] as $attribute => $attbvalue) {
-      if (!empty($attbvalue) && $attbvalue != 'default' && $attbvalue != 'user'
-          && !isset($attributes[$attribute]) ) {
+      if (!empty($attbvalue) && $attbvalue != 'default' && $attbvalue != 'user' && !isset($attributes[$attribute])) {
         $attributes[$attribute] = $attbvalue;
       }
     }
@@ -414,7 +417,9 @@ function _iframe_sanitize(&$item, $delta, &$field, &$node) {
   // Add identifier for the iframe html-code
   $item['html-id'] = 'iframe-' . $iframe_count;
   $iframe_count++;
-  if (!isset($item['attributes']['class'])) $item['attributes']['class']='';
+  if (!isset($item['attributes']['class'])) {
+    $item['attributes']['class'] = '';
+  }
   $item['attributes']['class'] .= ' iframe-delta-' . $delta;
 }
 
@@ -551,7 +556,7 @@ function iframe_process($element, $edit, $form_state, $form) {
   $element['attributes']['frameborder'] = array(
     '#type' => 'select',
     '#title' => t('Frameborder'),
-    '#options' => array( '0' => t('no frameborder'), 'yes' => t('show frameborder') ),
+    '#options' => array('0' => t('no frameborder'), 'yes' => t('show frameborder')),
     '#description' => t('Frameborder is the border arround the iframe. Mostly people want it silent, so the default value for frameborder is 0.'),
     '#required' => ($delta == 0 && $field['frameborder'] == 'required') ? $field['required'] : FALSE,
     '#default_value' => !empty($element['#value']['attributes']['frameborder'])? $element['#value']['attributes']['frameborder'] : $field['attributes']['frameborder'],
@@ -559,7 +564,7 @@ function iframe_process($element, $edit, $form_state, $form) {
   $element['attributes']['scrolling'] = array(
     '#type' => 'select',
     '#title' => t('Scrolling'),
-    '#options' => array( 'auto' => t('Scrolling automatic'), 'no' => t('Scrolling disabled'), 'yes' => t('Scrolling enabled') ),
+    '#options' => array('auto' => t('Scrolling automatic'), 'no' => t('Scrolling disabled'), 'yes' => t('Scrolling enabled')),
     '#description' => t('Scrollbars help the user to reach all iframe content despite the real height of the iframe content. Please disable it only if You know what You are doing.'),
     '#required' => ($delta == 0 && $field['scrolling'] == 'required') ? $field['required'] : FALSE,
     '#default_value' => !empty($element['#value']['attributes']['scrolling'])? $element['#value']['attributes']['scrolling'] : $field['attributes']['scrolling'],
@@ -602,7 +607,9 @@ function iframe_field_formatter_info() {
 function theme_iframe_formatter_default($element) {
   dmsg(3, 'func theme_iframe_formatter_default');
   // If no url given display nothing.
-  if (empty($element['#item']['url'])) return '';
+  if (empty($element['#item']['url'])) {
+    return '';
+  }
   // Display all
   return iframe_iframe($element['#item']['display_title'], $element['#item']['url'], $element['#item']);
 }
@@ -613,7 +620,9 @@ function theme_iframe_formatter_default($element) {
 function theme_iframe_formatter_iframeonly($element) {
   dmsg(3, 'func theme_iframe_formatter_iframeonly');
   // If no url given display nothing.
-  if (empty($element['#item']['url'])) return '';
+  if (empty($element['#item']['url'])) {
+    return '';
+  }
   // Display all
   return iframe_iframe('', $element['#item']['url'], $element['#item']);
 }
@@ -624,7 +633,9 @@ function theme_iframe_formatter_iframeonly($element) {
 function theme_iframe_formatter_asurl($element) {
   dmsg(3, 'func theme_iframe_formatter_asurl');
   // If no url given display nothing.
-  if (empty($element['#item']['url'])) return '';
+  if (empty($element['#item']['url'])) {
+    return '';
+  }
   // Display all
   $linktext = empty($element['#item']['display_title'])? $element['#item']['url'] : $element['#item']['display_title'];
   return l($linktext, $element['#item']['url'], $element['#item']);
@@ -636,7 +647,9 @@ function theme_iframe_formatter_asurl($element) {
 function theme_iframe_formatter_asurl_withuri($element) {
   dmsg(3, 'func theme_iframe_formatter_asurl_withuri');
   // If no url given display nothing.
-  if (empty($element['#item']['url'])) return '';
+  if (empty($element['#item']['url'])) {
+    return '';
+  }
   // Display all
   $linktext = $element['#item']['url'];
   return l($linktext, $element['#item']['url'], $element['#item']);
@@ -752,11 +765,14 @@ function iframe_validate_url($text) {
 /*
  * validate size: width and height of an iframe
  */
-function iframe_validate_size($size, $default="100") {
+function iframe_validate_size($size, $default = "100") {
   dmsg(3, 'func iframe_validate_size (size=' . $size . ', default=' . $default);
-  if (is_numeric($size))
+  if (is_numeric($size)) {
     return $size>0? $size : $default;
-  if (preg_match('/^\d+\%$/', $size)) return $size;
+  }
+  if (preg_match('/^\d+\%$/', $size)) {
+    return $size;
+  }
   return $default;
 }
 
@@ -764,22 +780,34 @@ function iframe_validate_size($size, $default="100") {
  * like central function
  * form the iframe code
  */
-function iframe_iframe($text, $path, $options=FALSE) {
+function iframe_iframe($text, $path, $options = FALSE) {
   dmsg(3, 'func iframe_iframe');
-  if (!$options) $options=array();
+  if (!$options) {
+    $options = array();
+  }
   // Merge in defaults.
 //dmsg(4, 'IFIF options=' . implode(" ++ ", explode("\n", print_r($options, TRUE))));
   $options += array(
-      'attributes' => array(),
-      'html' => FALSE,
-    );
-  if (!isset($options['attributes']['width'])) $options['attributes']['width']='100%';
-  if (!isset($options['attributes']['height'])) $options['attributes']['height']='701';
-  if (!isset($options['attributes']['frameborder']) || empty($options['attributes']['frameborder'])) $options['attributes']['frameborder']='0';
-  if (!isset($options['attributes']['scrolling']) || empty($options['attributes']['scrolling'])) $options['attributes']['scrolling']='auto';
+    'attributes' => array(),
+    'html' => FALSE,
+  );
+  if (!isset($options['attributes']['width'])) {
+    $options['attributes']['width'] = '100%';
+  }
+  if (!isset($options['attributes']['height'])) {
+    $options['attributes']['height'] = '701';
+  }
+  if (!isset($options['attributes']['frameborder']) || empty($options['attributes']['frameborder'])) {
+    $options['attributes']['frameborder'] = '0';
+  }
+  if (!isset($options['attributes']['scrolling']) || empty($options['attributes']['scrolling'])) {
+    $options['attributes']['scrolling'] = 'auto';
+  }
 
-  $htmlid='';
-  if (isset($options['html-id']) && !empty($options['html-id'])) $htmlid=' id="' . $options['html-id'] . '" name="' . $options['html-id'] . '"';
+  $htmlid = '';
+  if (isset($options['html-id']) && !empty($options['html-id'])) {
+    $htmlid = ' id="' . $options['html-id'] . '" name="' . $options['html-id'] . '"';
+  }
 
   // Append active class.
   if ($path == $_GET['q'] || ($path == '<front>' && drupal_is_front_page())) {
@@ -796,8 +824,8 @@ function iframe_iframe($text, $path, $options=FALSE) {
   if (isset($options['attributes']['title']) && strpos($options['attributes']['title'], '<') !== FALSE) {
     $options['attributes']['title'] = strip_tags($options['attributes']['title']);
   }
-  $optionsLink==array(); $optionsLink['attributes']=array();
-  $optionsLink['attributes']['title'] = $options['attributes']['title'];
+  $options_link = array(); $options_link['attributes'] = array();
+  $options_link['attributes']['title'] = $options['attributes']['title'];
 
   include_once(drupal_get_path('module', 'content') .'/includes/content.crud.inc');
 
@@ -805,6 +833,6 @@ function iframe_iframe($text, $path, $options=FALSE) {
     '<iframe src="' . check_url(url($path, $options)) . '"' . drupal_attributes($options['attributes']) .
     $htmlid .
     '>' .
-    t('Your browser does not support iframes. But You can use the following link.') . ' ' . l('Link', check_url(url($path, $options)), $optionsLink) . '</iframe>';
+    t('Your browser does not support iframes. But You can use the following link.') . ' ' . l('Link', check_url(url($path, $options)), $options_link) . '</iframe>';
 }
 
