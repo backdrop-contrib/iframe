@@ -2,6 +2,13 @@
 // $Id$
 
 /**
+ * @file
+ * Defines simple iframe field types.
+ *  based on the cck-module "link" by quicksketch
+ * Functions for install and uninstall AND Migrations
+ */
+
+/**
  * Implementation of hook_install().
  */
 function iframe_install() {
@@ -9,22 +16,22 @@ function iframe_install() {
 }
 
 /**
-* Implementation of hook_uninstall().
-*/
+ * Implementation of hook_uninstall().
+ */
 function iframe_uninstall() {
   content_notify('uninstall', 'iframe');
 }
 
 /**
-* Implementation of hook_enable().
-*/
+ * Implementation of hook_enable().
+ */
 function iframe_enable() {
   content_notify('enable', 'iframe');
 }
 
 /**
-* Implementation of hook_disable().
-*/
+ * Implementation of hook_disable().
+ */
 function iframe_disable() {
   content_notify('disable', 'iframe');
 }
@@ -51,9 +58,8 @@ function iframe_update_1() {
           'width' => array('type' => 'mediumtext', 'not null' => FALSE),
           'height' => array('type' => 'mediumtext', 'not null' => FALSE),
         );
-/*
-        content_alter_db_field(array(), array(), $field, $columns);
-*/
+
+        // content_alter_db_field(array(), array(), $field, $columns);
         content_alter_db($columns['url'], $columns['url']);
         content_alter_db($columns['title'], $columns['title']);
         content_alter_db($columns['attributes'], $columns['attributes']);
@@ -90,7 +96,7 @@ function iframe_update_1() {
 
 /**
  * Increase size of url-field to 1024 chars
-*/
+ */
 function iframe_update_6010() {
   $ret = array();
 

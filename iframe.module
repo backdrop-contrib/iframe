@@ -4,7 +4,8 @@
 /**
  * @file
  * Defines simple iframe field types.
- *  based on the cck-module "iframe" by quicksketch
+ *  based on the cck-module "link" by quicksketch
+ * MODULE-Funtions
  */
 
 define('iframe_EXTERNAL', 'external');
@@ -17,9 +18,9 @@ if (!defined('DEBUG_LEVEL')) {
   define('DEBUG_LEVEL', 0);
 }
 if (!function_exists('dmsg')) {
- function dmsg($level, $text) {
-   if ($level <= DEBUG_LEVEL) error_log('iframe(' . $level . '): ' . $text);
- }
+  function dmsg($level, $text) {
+    if ($level <= DEBUG_LEVEL) error_log('iframe(' . $level . '): ' . $text);
+  }
 }
 /**
  * Implementation of hook_field_info().
@@ -286,22 +287,25 @@ function _iframe_process(&$item, $delta = 0, $field, $node) {
 
 function _iframe_validate(&$item, $delta, $field, $node, &$optional_field_found) {
   dmsg(3, 'func _iframe_validate');
+  $trimmed_title = trim($item['title']);
+  $trimmed_url   = trim($item['url']);
+
   if ($item['url'] && !(isset($field['widget']['default_value'][$delta]['url']) && $item['url'] == $field['widget']['default_value'][$delta]['url'] && !$field['required'])) {
     // Validate the iframe.
-    if (iframe_validate_url(trim($item['url'])) == FALSE) {
+    if (iframe_validate_url($trimmed_url) == FALSE) {
       form_set_error($field['field_name'] . '][' . $delta . '][url', t('Not a valid iframe-url.'));
     }
     // Require a title for the iframe if necessary.
-    if ($field['title'] == 'required' && strlen(trim($item['title'])) == 0) {
+    if ($field['title'] == 'required' && empty($trimmed_title)) {
       form_set_error($field['field_name'] . '][' . $delta . '][title', t('Titles are required for all iframes.'));
     }
   }
   // Require a iframe if we have a title.
-  if ($field['url'] !== 'optional' && strlen($item['title']) > 0 && strlen(trim($item['url'])) == 0) {
+  if ($field['url'] !== 'optional' && drupal_strlen($item['title']) > 0 && empty($trimmed_url)) {
     form_set_error($field['field_name'] . '][' . $delta . '][url', t('You cannot enter a title without a iframe url.'));
   }
   // In a totally bizzaro case, where URLs and titles are optional but the field is required, ensure there is at least one iframe.
-  if ($field['url'] == 'optional' && $field['title'] == 'optional' && (strlen(trim($item['url'])) != 0 || strlen(trim($item['title'])) != 0)) {
+  if ($field['url'] == 'optional' && $field['title'] == 'optional' && ( !empty($trimmed_title) || !empty($trimmed_url) )) {
     $optional_field_found = TRUE;
   }
 }
@@ -339,26 +343,26 @@ function _iframe_sanitize(&$item, $delta, &$field, &$node) {
 
   // Separate out the anchor if any.
   if (strpos($url, '#') !== FALSE) {
-    $item['fragment'] = substr($url, strpos($url, '#') + 1);
-    $url = substr($url, 0, strpos($url, '#'));
+    $item['fragment'] = drupal_substr($url, strpos($url, '#') + 1);
+    $url = drupal_substr($url, 0, strpos($url, '#'));
   }
   // Separate out the query string if any.
   if (strpos($url, '?') !== FALSE) {
-    $item['query'] = substr($url, strpos($url, '?') + 1);
-    $url = substr($url, 0, strpos($url, '?'));
+    $item['query'] = drupal_substr($url, strpos($url, '?') + 1);
+    $url = drupal_substr($url, 0, strpos($url, '?'));
   }
   // Save the new URL without the anchor or query.
   $item['url'] = $url;
 
   // Create a shortened URL for display.
   $display_url = $type == iframe_EMAIL ? str_replace('mailto:', '', $url) : url($url, array('query' => isset($item['query']) ? $item['query'] : NULL, 'fragment' => isset($item['fragment']) ? $item['fragment'] : NULL, 'absolute' => TRUE));
-  if (strlen($display_url) > 72) {
-    $display_url = substr($display_url, 0, 72) . "...";
+  if (drupal_strlen($display_url) > 72) {
+    $display_url = drupal_substr($display_url, 0, 72) . "...";
   }
   $item['display_url'] = $display_url;
 
   // Use the title defined at the field level.
-  if ($field['title'] == 'value' && strlen(trim($field['title_value']))) {
+  if ($field['title'] == 'value' && drupal_strlen(trim($field['title_value']))) {
     $title = $field['title_value'];
   }
   // Use the title defined by the user at the widget level.
@@ -505,62 +509,62 @@ function iframe_elements() {
  */
 function iframe_process($element, $edit, $form_state, $form) {
   dmsg(3, 'func iframe_process');
-   $field = $form['#field_info'][$element['#field_name']];
-   $delta = $element['#delta'];
-   // load attributes by node
-    _iframe_load($element['#value']);
+  $field = $form['#field_info'][$element['#field_name']];
+  $delta = $element['#delta'];
+  // load attributes by node
+  _iframe_load($element['#value']);
   dmsg(4, 'func iframe_process after _iframe_load');
 
-   $element['url'] = array(
-     '#type' => 'textfield',
-     '#maxlength' => '1024',
-     '#title' => t('URL'),
-     '#description' => $element['#description'],
-     '#required' => ($delta == 0 && $field['url'] !== 'optional') ? $element['#required'] : FALSE,
-     '#default_value' => isset($element['#value']['url']) ? $element['#value']['url'] : NULL,
-   );
-   if ($field['title'] != 'none' && $field['title'] != 'value') {
-     $element['title'] = array(
-       '#type' => 'textfield',
-       '#maxlength' => '255',
-       '#title' => t('Title'),
-       '#required' => ($delta == 0 && $field['title'] == 'required') ? $field['required'] : FALSE,
-       '#default_value' => isset($element['#value']['title']) ? $element['#value']['title'] : NULL,
-     );
-   }
-   $element['attributes']['width'] = array(
-     '#type' => 'textfield',
-     '#maxlength' => '4',
-     '#size' => '4',
-     '#title' => t('Width'),
-     '#required' => ($delta == 0 && $field['width'] == 'required') ? $field['required'] : FALSE,
-     '#default_value' => !empty($element['#value']['attributes']['width'])? $element['#value']['attributes']['width'] : $field['attributes']['width'],
-   );
-   $element['attributes']['height'] = array(
-     '#type' => 'textfield',
-     '#maxlength' => '4',
-     '#size' => '4',
-     '#title' => t('Height'),
-     '#required' => ($delta == 0 && $field['height'] == 'required') ? $field['required'] : FALSE,
-     '#default_value' => !empty($element['#value']['attributes']['height'])? $element['#value']['attributes']['height'] : $field['attributes']['height'],
-   );
-   $element['attributes']['frameborder'] = array(
-     '#type' => 'select',
-     '#title' => t('Frameborder'),
-     '#options' => array( '0' => t('no frameborder'), 'yes' => t('show frameborder') ),
-     '#description' => t('Frameborder is the border arround the iframe. Mostly people want it silent, so the default value for frameborder is 0.'),
-     '#required' => ($delta == 0 && $field['frameborder'] == 'required') ? $field['required'] : FALSE,
-     '#default_value' => !empty($element['#value']['attributes']['frameborder'])? $element['#value']['attributes']['frameborder'] : $field['attributes']['frameborder'],
-   );
-   $element['attributes']['scrolling'] = array(
-     '#type' => 'select',
-     '#title' => t('Scrolling'),
-     '#options' => array( 'auto' => t('Scrolling automatic'), 'no' => t('Scrolling disabled'), 'yes' => t('Scrolling enabled') ),
-     '#description' => t('Scrollbars help the user to reach all iframe content despite the real height of the iframe content. Please disable it only if You know what You are doing.'),
-     '#required' => ($delta == 0 && $field['scrolling'] == 'required') ? $field['required'] : FALSE,
-     '#default_value' => !empty($element['#value']['attributes']['scrolling'])? $element['#value']['attributes']['scrolling'] : $field['attributes']['scrolling'],
-   );
-   return $element;
+  $element['url'] = array(
+    '#type' => 'textfield',
+    '#maxlength' => '1024',
+    '#title' => t('URL'),
+    '#description' => $element['#description'],
+    '#required' => ($delta == 0 && $field['url'] !== 'optional') ? $element['#required'] : FALSE,
+    '#default_value' => isset($element['#value']['url']) ? $element['#value']['url'] : NULL,
+  );
+  if ($field['title'] != 'none' && $field['title'] != 'value') {
+    $element['title'] = array(
+      '#type' => 'textfield',
+      '#maxlength' => '255',
+      '#title' => t('Title'),
+      '#required' => ($delta == 0 && $field['title'] == 'required') ? $field['required'] : FALSE,
+      '#default_value' => isset($element['#value']['title']) ? $element['#value']['title'] : NULL,
+    );
+  }
+  $element['attributes']['width'] = array(
+    '#type' => 'textfield',
+    '#maxlength' => '4',
+    '#size' => '4',
+    '#title' => t('Width'),
+    '#required' => ($delta == 0 && $field['width'] == 'required') ? $field['required'] : FALSE,
+    '#default_value' => !empty($element['#value']['attributes']['width'])? $element['#value']['attributes']['width'] : $field['attributes']['width'],
+  );
+  $element['attributes']['height'] = array(
+    '#type' => 'textfield',
+    '#maxlength' => '4',
+    '#size' => '4',
+    '#title' => t('Height'),
+    '#required' => ($delta == 0 && $field['height'] == 'required') ? $field['required'] : FALSE,
+    '#default_value' => !empty($element['#value']['attributes']['height'])? $element['#value']['attributes']['height'] : $field['attributes']['height'],
+  );
+  $element['attributes']['frameborder'] = array(
+    '#type' => 'select',
+    '#title' => t('Frameborder'),
+    '#options' => array( '0' => t('no frameborder'), 'yes' => t('show frameborder') ),
+    '#description' => t('Frameborder is the border arround the iframe. Mostly people want it silent, so the default value for frameborder is 0.'),
+    '#required' => ($delta == 0 && $field['frameborder'] == 'required') ? $field['required'] : FALSE,
+    '#default_value' => !empty($element['#value']['attributes']['frameborder'])? $element['#value']['attributes']['frameborder'] : $field['attributes']['frameborder'],
+  );
+  $element['attributes']['scrolling'] = array(
+    '#type' => 'select',
+    '#title' => t('Scrolling'),
+    '#options' => array( 'auto' => t('Scrolling automatic'), 'no' => t('Scrolling disabled'), 'yes' => t('Scrolling enabled') ),
+    '#description' => t('Scrollbars help the user to reach all iframe content despite the real height of the iframe content. Please disable it only if You know what You are doing.'),
+    '#required' => ($delta == 0 && $field['scrolling'] == 'required') ? $field['required'] : FALSE,
+    '#default_value' => !empty($element['#value']['attributes']['scrolling'])? $element['#value']['attributes']['scrolling'] : $field['attributes']['scrolling'],
+  );
+  return $element;
 }
 
 /**
@@ -747,7 +751,7 @@ function iframe_validate_url($text) {
 
 /*
  * validate size: width and height of an iframe
-*/
+ */
 function iframe_validate_size($size, $default="100") {
   dmsg(3, 'func iframe_validate_size (size=' . $size . ', default=' . $default);
   if (is_numeric($size))
@@ -759,7 +763,7 @@ function iframe_validate_size($size, $default="100") {
 /*
  * like central function
  * form the iframe code
-*/
+ */
 function iframe_iframe($text, $path, $options=FALSE) {
   dmsg(3, 'func iframe_iframe');
   if (!$options) $options=array();
