@@ -737,7 +737,7 @@ function iframe_validate_url($text) {
 
   $directories = "(\/[a-z0-9_\-\.~+%=&,$'():;*@\[\]]*)*";
    // Yes, four backslashes == a single backslash.
-  $query = "(\/?\?([?a-z0-9+_|\-\.\/\\\\%=&,$'():;*@\[\]]*))";
+  $query = "(\/?\?([?a-z0-9+_|\-\.\/\\\\%=&,$'():;*@\[\]\{\}]*))";
   $anchor = "(#[a-z0-9_\-\.~+%=&,$'():;*@\[\]]*)";
 
   // The rest of the path for a standard URL.
