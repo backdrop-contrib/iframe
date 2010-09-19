@@ -142,6 +142,13 @@ function iframe_field_settings($op, $field) {
         '#default_value' => empty($field['attributes']['scrolling']) ? 'auto' : $field['attributes']['scrolling'],
         '#description' => t('Scrollbars help the user to reach all iframe content despite the real height of the iframe content. Please disable it only if You know what You are doing.'),
       );
+      $form['attributes']['transparency'] = array(
+        '#type' => 'select',
+        '#title' => t('Transparency'),
+        '#options' => array('0' => t('no transparency'), 'yes' => t('allow transparency')),
+        '#default_value' => empty($field['attributes']['transparency']) ? '0' : $field['attributes']['transparency'],
+        '#description' => t('Allow transparency per CSS in the outer iframe tag. You have to set background-color:transparent in Your IFrame too for the body tag!'),
+      );
       return $form;
 
     case 'validate':
@@ -389,7 +396,7 @@ function _iframe_sanitize(&$item, $delta, &$field, &$node) {
   $attributes = array();
   if (!empty($item['attributes']) && is_array($item['attributes'])) {
     foreach ($item['attributes'] as $attribute => $attbvalue) {
-      if (isset($attbvalue) && ($field['attributes'][$attribute] == 'user' || $attribute == 'width' || $attribute == 'height' || $attribute == 'frameborder' || $attribute == 'scrolling')) {
+      if (isset($attbvalue) && ($field['attributes'][$attribute] == 'user' || $attribute == 'width' || $attribute == 'height' || $attribute == 'frameborder' || $attribute == 'scrolling' || $attribute == 'transparency')) {
         $attributes[$attribute] = $attbvalue;
       }
     }
@@ -568,6 +575,14 @@ function iframe_process($element, $edit, $form_state, $form) {
     '#description' => t('Scrollbars help the user to reach all iframe content despite the real height of the iframe content. Please disable it only if You know what You are doing.'),
     '#required' => ($delta == 0 && $field['scrolling'] == 'required') ? $field['required'] : FALSE,
     '#default_value' => !empty($element['#value']['attributes']['scrolling'])? $element['#value']['attributes']['scrolling'] : $field['attributes']['scrolling'],
+  );
+  $element['attributes']['transparency'] = array(
+    '#type' => 'select',
+    '#title' => t('Transparency'),
+    '#options' => array('0' => t('no transparency'), 'yes' => t('allow transparency')),
+    '#description' => t('Allow transparency per CSS in the outer iframe tag. You have to set background-color:transparent in Your IFrame too for the body tag!'),
+    '#required' => ($delta == 0 && $field['transparency'] == 'required') ? $field['required'] : FALSE,
+    '#default_value' => !empty($element['#value']['attributes']['transparency'])? $element['#value']['attributes']['transparency'] : $field['attributes']['transparency'],
   );
   return $element;
 }
@@ -803,6 +818,9 @@ function iframe_iframe($text, $path, $options = FALSE) {
   if (!isset($options['attributes']['scrolling']) || empty($options['attributes']['scrolling'])) {
     $options['attributes']['scrolling'] = 'auto';
   }
+  if (!isset($options['attributes']['transparency']) || empty($options['attributes']['transparency'])) {
+    $options['attributes']['transparency'] = '0';
+  }
 
   $htmlid = '';
   if (isset($options['html-id']) && !empty($options['html-id'])) {
@@ -833,6 +851,6 @@ function iframe_iframe($text, $path, $options = FALSE) {
     '<iframe src="' . check_url(url($path, $options)) . '"' . drupal_attributes($options['attributes']) .
     $htmlid .
     '>' .
-    t('Your browser does not support iframes. But You can use the following link.') . ' ' . l('Link', check_url(url($path, $options)), $options_link) . '</iframe>';
+    t('Your browser does not support iframes. But You can use the following link.') . ' ' . l('Link', url($path, $options), $options_link) . '</iframe>';
 }
 
