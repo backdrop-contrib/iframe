@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: modules-iframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-03 23:44+0100\n"
+"POT-Creation-Date: 2010-09-20 01:05+0200\n"
 "PO-Revision-Date: 2010-01-03 23:44+0100\n"
 "Last-Translator: Steffen Schüssler <drupal@neffets.de>\n"
 "Language-Team: German\n"
@@ -21,22 +21,22 @@ msgstr ""
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: iframe.module:31 iframe.info:0
+#: iframe.module:34 iframe.info:0
 msgid "IFrame"
 msgstr "IFrame"
 
-#: iframe.module:32
+#: iframe.module:35
 msgid ""
 "Store a title, src, and attributes in the database to assemble an iframe."
 msgstr ""
 "Speichere einen Titel, eine Verweis-src und weitere Attribute in die "
 "Datenbank, um daraus ein IFrame zu basteln."
 
-#: iframe.module:51
+#: iframe.module:54
 msgid "Optional url"
 msgstr "Verweis optional"
 
-#: iframe.module:54
+#: iframe.module:57
 msgid ""
 "If checked, the url field is optional. If the url is ommitted, nothing will "
 "be displayed."
@@ -44,27 +44,27 @@ msgstr ""
 "Wenn ausgewählt, dann ist das Verweis Feld optional, kann also weggelassen "
 "werden und Nichts wird angezeigt."
 
-#: iframe.module:58
+#: iframe.module:61
 msgid "Optional Title"
 msgstr "Titel optional"
 
-#: iframe.module:59
+#: iframe.module:62
 msgid "Required Title"
 msgstr "Titel notwendig"
 
-#: iframe.module:60
+#: iframe.module:63
 msgid "Static Title: "
 msgstr "Statischer Titel: "
 
-#: iframe.module:61
+#: iframe.module:64
 msgid "No Title"
 msgstr "Kein Titel"
 
-#: iframe.module:66
+#: iframe.module:69
 msgid "IFrame Title"
 msgstr "IFrame Titel"
 
-#: iframe.module:69
+#: iframe.module:72
 msgid ""
 "If the iframe title is optional or required, a field will be displayed to "
 "the end user. If the iframe title is static, the iframe will always use the "
@@ -81,11 +81,11 @@ msgstr ""
 "auch viele XHTML tags enthalten, wie <em>strong</em>,·<em>em</em>,·<em>img</"
 "em>,·<em>span</em>,·usw."
 
-#: iframe.module:84
+#: iframe.module:87
 msgid "Placeholder tokens"
 msgstr "Token-Platzhalter"
 
-#: iframe.module:85
+#: iframe.module:88
 msgid ""
 "The following placeholder tokens can be used in both paths and titles. When "
 "used in a path or title, they will be replaced with the appropriate values."
@@ -94,11 +94,11 @@ msgstr ""
 "verwendet werden. Sie werden dann automatisch mit den entsprechenden Werten "
 "befüllt."
 
-#: iframe.module:93
+#: iframe.module:96
 msgid "Allow user-entered tokens"
 msgstr "Erlaube dem Benutzer Platzhalter"
 
-#: iframe.module:95
+#: iframe.module:98
 msgid ""
 "Checking will allow users to enter tokens in URLs and Titles on the node "
 "edit form. This does not affect the field settings on this page."
@@ -107,11 +107,11 @@ msgstr ""
 "Platzhalter zu benutzen. Das betrifft aber nicht die Feldeinstellungen hier "
 "auf der Admin-Seite."
 
-#: iframe.module:108
+#: iframe.module:111
 msgid "Additional CSS Class"
 msgstr "Zusätzliche CSS-Klassen"
 
-#: iframe.module:109
+#: iframe.module:112
 msgid ""
 "When output, this iframe will have this class attribute. Multiple classes "
 "should be separated by spaces."
@@ -119,33 +119,33 @@ msgstr ""
 "Bei der Ausgabe wird das IFrame die zusätzlichen CSS-Klassen haben. Mehrere "
 "Klassen sollten mit Leerzeichen getrennt sein."
 
-#: iframe.module:114
+#: iframe.module:117
 msgid "width of the iframe"
 msgstr "Breite des IFrame"
 
-#: iframe.module:115;123
+#: iframe.module:118;126
 msgid "iframes need fix width and height, only numbers are allowed."
 msgstr ""
 "IFrames brauchen eine feste definierte Breite und Höhe, nur Zahlen sind "
 "erlaubt oder ganzzahlige Prozentangaben."
 
-#: iframe.module:122
+#: iframe.module:125
 msgid "height of the iframe"
 msgstr "Höhe des IFrame"
 
-#: iframe.module:130;549
+#: iframe.module:133;565
 msgid "Frameborder"
 msgstr "Frameborder"
 
-#: iframe.module:131;550
+#: iframe.module:134;566
 msgid "no frameborder"
 msgstr "keine Frameborder"
 
-#: iframe.module:131;550
+#: iframe.module:134;566
 msgid "show frameborder"
 msgstr "zeige Frameborder"
 
-#: iframe.module:133
+#: iframe.module:136
 msgid ""
 "Frameborder is the border arround the iframe. Mostly people want it silent, "
 "so the default value for frameborder is 0 = no."
@@ -153,77 +153,97 @@ msgstr ""
 "Frameborder ist die Umrandung um den IFrame herum. Die meisten Menschen "
 "wollen das nicht sehen, deshalb ist der Standardwert 0."
 
-#: iframe.module:137;557
+#: iframe.module:140;573
 msgid "Scrolling"
 msgstr "Seitenlaufleiste"
 
-#: iframe.module:138;558
+#: iframe.module:141;574
 msgid "Scrolling automatic"
 msgstr "Seitenlaufleiste automatisch"
 
-#: iframe.module:138;558
+#: iframe.module:141;574
 msgid "Scrolling disabled"
 msgstr "keine Seitenlaufleiste"
 
-#: iframe.module:138;558
+#: iframe.module:141;574
 msgid "Scrolling enabled"
 msgstr "Seitenlaufleiste immer an"
 
-#: iframe.module:140;559
+#: iframe.module:143;575
 msgid ""
 "Scrollbars help the user to reach all iframe content despite the real height "
 "of the iframe content. Please disable it only if You know what You are doing."
 msgstr ""
-"Seitenlaufleisten helfen dem Nutzer Bereiche des IFrame zu sehen, "
-"die bei zu grosser Höhe sonst nicht sichtbar wären."
+"Seitenlaufleisten helfen dem Nutzer Bereiche des IFrame zu sehen, die bei zu "
+"grosser Höhe sonst nicht sichtbar wären."
 
-#: iframe.module:146
+#: iframe.module:147;581
+msgid "Transparency"
+msgstr "Transparenz"
+
+#: iframe.module:148;582
+msgid "no transparency"
+msgstr "nicht transparent"
+
+#: iframe.module:148;582
+msgid "allow transparency"
+msgstr "erlaube Transparenz"
+
+#: iframe.module:150;583
+msgid ""
+"Allow transparency per CSS in the outer iframe tag. You have to set "
+"background-color:transparent in Your IFrame too for the body tag!"
+msgstr ""
+"Erlaubt per CSS dem iframe-Tag transparent zu sein. Um wirklich transparenti zu werden,"
+"muss im IFrame selbst für das body-Tag background-color:transparent gesetzt werden!"
+
+#: iframe.module:156
 msgid "A default title must be provided if the title is a static value"
 msgstr ""
 "Ein Standard-Titel muss angegeben werden, wenn der Titel ein fixer Titel "
 "sein soll."
 
-#: iframe.module:149;152
+#: iframe.module:159;162
 msgid "A default width and height must be provided."
 msgstr "Eine Standard-Breite und Höhe müssen angegeben werden."
 
-#: iframe.module:213
+#: iframe.module:223
 msgid "At least one title or URL must be entered."
 msgstr "Mindestens ein Titel oder ein Verweis müssen angegeben werden."
 
-#: iframe.module:292
+#: iframe.module:307
 msgid "Not a valid iframe-url."
 msgstr "Kein gültiger IFrame-Verweis."
 
-#: iframe.module:296
+#: iframe.module:311
 msgid "Titles are required for all iframes."
 msgstr "Titel sind für alle IFrames notwendig."
 
-#: iframe.module:301
+#: iframe.module:316
 msgid "You cannot enter a title without a iframe url."
 msgstr "Ohne einen IFrame-Verweis macht ein Titel keinen Sinn."
 
-#: iframe.module:471
+#: iframe.module:487
 msgid "Width and Height of the IFrame"
 msgstr "Breite und Höhe des IFrames"
 
-#: iframe.module:517
+#: iframe.module:533
 msgid "URL"
 msgstr "Verweis"
 
-#: iframe.module:526
+#: iframe.module:542
 msgid "Title"
 msgstr "Titel"
 
-#: iframe.module:535
+#: iframe.module:551
 msgid "Width"
 msgstr "Breite"
 
-#: iframe.module:543
+#: iframe.module:559
 msgid "Height"
 msgstr "Höhe"
 
-#: iframe.module:551
+#: iframe.module:567
 msgid ""
 "Frameborder is the border arround the iframe. Mostly people want it silent, "
 "so the default value for frameborder is 0."
@@ -231,35 +251,35 @@ msgstr ""
 "Frameborder ist die Umrandung um den IFrame herum. Die meisten Menschen "
 "wollen das nicht sichtbar, deshalb ist der Standardwert 0."
 
-#: iframe.module:573
+#: iframe.module:597
 msgid "Title, over iframe (default)"
 msgstr "Titel über dem IFrame (default)"
 
-#: iframe.module:578
+#: iframe.module:602
 msgid "IFrame without title"
 msgstr "IFrame ohne Titel"
 
-#: iframe.module:583
+#: iframe.module:607
 msgid "A link with the given title"
 msgstr "Ein Link mit dem vorgegeben Titel als Linktext"
 
-#: iframe.module:588
+#: iframe.module:612
 msgid "A link with the iframe uri"
 msgstr "Ein Link mit der URI als Linktext"
 
-#: iframe.module:646
+#: iframe.module:678
 msgid "iframe URL"
 msgstr "IFrame Verweis"
 
-#: iframe.module:647
+#: iframe.module:679
 msgid "iframe title"
 msgstr "IFrame Titel"
 
-#: iframe.module:648
+#: iframe.module:680
 msgid "Formatted html iframe"
 msgstr "Formatiertes IFrame-html"
 
-#: iframe.module:804
+#: iframe.module:854
 msgid ""
 "Your browser does not support iframes. But You can use the following link."
 msgstr ""
