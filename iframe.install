@@ -8,10 +8,28 @@
  * Functions for install and uninstall AND Migrations
  */
 
+function iframe_requirements($phase) {
+  $requirements = array();
+  // Ensure translations don't break at install time
+  $t = get_t();
+  if (!module_exists('content') || !function_exists('content_notify')) {
+    $requirements['iframe'] = array(
+      'title' => $t('CCK needed'),
+      'description' => $t("CCK module \"content\" required."),
+      'severity' => REQUIREMENT_ERROR,
+    );
+  }
+  return $requirements;
+}
+
 /**
  * Implementation of hook_install().
  */
 function iframe_install() {
+  if (!module_exists('content') || !function_exists('content_notify')) {
+    $ret['#abort'] = array('success' => FALSE, 'query' => t('Required module "content" (cck) not found!'));
+    return $ret;
+  }
   content_notify('install', 'iframe');
 }
 
@@ -19,13 +37,19 @@ function iframe_install() {
  * Implementation of hook_uninstall().
  */
 function iframe_uninstall() {
-  content_notify('uninstall', 'iframe');
+  if (module_exists('content') && function_exists('content_notify')) {
+    content_notify('uninstall', 'iframe');
+  }
 }
 
 /**
  * Implementation of hook_enable().
  */
 function iframe_enable() {
+  if (!module_exists('content') || !function_exists('content_notify')) {
+    $ret['#abort'] = array('success' => FALSE, 'query' => t('Required module "content" (cck) not found!'));
+    return $ret;
+  }
   content_notify('enable', 'iframe');
 }
 
@@ -33,7 +57,9 @@ function iframe_enable() {
  * Implementation of hook_disable().
  */
 function iframe_disable() {
-  content_notify('disable', 'iframe');
+  if (module_exists('content') && function_exists('content_notify')) {
+    content_notify('disable', 'iframe');
+  }
 }
 
 /**
