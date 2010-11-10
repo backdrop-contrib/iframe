@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: modules-iframe\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-20 01:05+0200\n"
+"POT-Creation-Date: 2010-11-10 01:22+0100\n"
 "PO-Revision-Date: 2010-01-03 23:44+0100\n"
 "Last-Translator: Steffen Schüssler <drupal@neffets.de>\n"
 "Language-Team: German\n"
@@ -194,8 +194,9 @@ msgid ""
 "Allow transparency per CSS in the outer iframe tag. You have to set "
 "background-color:transparent in Your IFrame too for the body tag!"
 msgstr ""
-"Erlaubt per CSS dem iframe-Tag transparent zu sein. Um wirklich transparenti zu werden,"
-"muss im IFrame selbst für das body-Tag background-color:transparent gesetzt werden!"
+"Erlaubt per CSS dem iframe-Tag transparent zu sein. Um wirklich transparenti "
+"zu werden,muss im IFrame selbst für das body-Tag background-color:"
+"transparent gesetzt werden!"
 
 #: iframe.module:156
 msgid "A default title must be provided if the title is a static value"
@@ -289,6 +290,18 @@ msgstr ""
 #: iframe.module:0
 msgid "iframe"
 msgstr "IFrame"
+
+#: iframe.install:30;50
+msgid "Required module \"content\" (cck) not found!"
+msgstr ""
+
+#: (duplicate) iframe.install:17
+msgid "CCK needed"
+msgstr ""
+
+#: (duplicate) iframe.install:18
+msgid "CCK module \"content\" required."
+msgstr ""
 
 #: iframe.info:0
 msgid "Defines simple iframe field types as CCK submodule."
