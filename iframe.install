@@ -2,27 +2,6 @@
 // $Id$
 
 /**
- * @file
- * Defines simple iframe field types.
- *  based on the cck-module "link" by quicksketch
- * Functions for install and uninstall AND Migrations
- */
-
-function iframe_requirements($phase) {
-  $requirements = array();
-  // Ensure translations don't break at install time
-  $t = get_t();
-  if (!module_exists('content') || !function_exists('content_notify')) {
-    $requirements['iframe'] = array(
-      'title' => $t('CCK needed'),
-      'description' => $t("CCK module \"content\" required."),
-      'severity' => REQUIREMENT_ERROR,
-    );
-  }
-  return $requirements;
-}
-
-/**
  * Implementation of hook_install().
  */
 function iframe_install() {
