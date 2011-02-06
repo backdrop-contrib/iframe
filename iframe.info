@@ -1,7 +1,12 @@
 ; $Id$
-name = IFrame
-description = Defines simple iframe field types as CCK submodule.
-dependencies[] = content
+name = Iframe
+description = Defines simple iframe field types.
 package = CCK
-core = 6.x
+version = 0.0.1
+core = 7.x
+dependencies[] = field
+files[] = iframe.module
+files[] = iframe.install
+;files[] = iframe.test
+required = FALSE
 
