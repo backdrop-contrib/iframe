@@ -1,5 +1,4 @@
 # translation of modules-iframe.po to German
-# $Id$
 # LANGUAGE translation of Drupal (general)
 # Copyright 2008-2009 Schüssler <drupal@neffets.de>
 # Generated from files:

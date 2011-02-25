@@ -1,4 +1,3 @@
-# $id$
 msgid ""
 msgstr ""
 "Project-Id-Version: iframe drupal module : french translation\n"

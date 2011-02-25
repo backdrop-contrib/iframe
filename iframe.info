@@ -1,4 +1,3 @@
-; $Id$
 name = Iframe
 description = Defines simple iframe field types.
 package = CCK

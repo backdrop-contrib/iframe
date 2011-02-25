@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 // see: fieldapi/text/text.test
 class IframeFieldTestCase extends DrupalWebTestCase {
