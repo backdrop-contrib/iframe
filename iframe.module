@@ -315,7 +315,7 @@ function iframe_field_presave($entity_type, $entity, $field, $instance, $langcod
       }
     }
   }
-drupal_set_message(htmlspecialchars(print_r(array('function' => 'presave', 'items' => $items), TRUE)), 'error');
+  #drupal_set_message(htmlspecialchars(print_r(array('function' => 'presave', 'items' => $items), TRUE)), 'error');
 }
 
 
@@ -540,7 +540,7 @@ function iframe_field_widget_settings_form($field, $instance) {
   $widget = $instance['widget'];
   $settings = $widget['settings'];
 
-drupal_set_message(htmlspecialchars(print_r(array('function' => 'iframe_field_widget_settings_form', $instance), TRUE)), 'error');
+  #drupal_set_message(htmlspecialchars(print_r(array('function' => 'iframe_field_widget_settings_form', $instance), TRUE)), 'error');
   $form = array();
 /*
     $form['field_widget_settings_form'] = array(
@@ -561,7 +561,7 @@ drupal_set_message(htmlspecialchars(print_r(array('function' => 'iframe_field_wi
  */
 function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $base) {
   $element = $base;
-#drupal_set_message(htmlspecialchars(print_r($base, TRUE)), 'error');
+  #drupal_set_message(htmlspecialchars(print_r($base, TRUE)), 'error');
 
   // description of widget (help-text)
   switch ($instance['widget']['type']) {
