@@ -40,7 +40,7 @@ function iframe_help($path, $arg) {
 /***************************************************************
  * Field Type API hooks
  ***************************************************************/
- 
+
 /**
  * Implements hook_field_info().
  */
@@ -332,7 +332,7 @@ function iframe_field_is_empty($item, $field) {
 /***********************************************************************
  *  Field Type API: Formatter
  **********************************************************************/
- 
+
 /**
  * Implements hook_field_formatter_info().
  */
@@ -362,7 +362,7 @@ function iframe_field_formatter_info() {
  */
 function iframe_field_formatter_view($object_type, $object, $field, $instance, $langcode, $items, $display) {
   $element = array();
-  
+
   if ($display['type']=='iframe_formatter_default') {
       foreach ($items as $delta => $item) {
         $element[$delta] = '<p>' . iframe_formatter_default_helper($item, $delta) . '</p>';
@@ -505,7 +505,7 @@ function iframe_iframe($text, $path, $options = FALSE) {
 /**************************************************************************
  * Field Type API: Widget
  **************************************************************************/
- 
+
 /**
  * Implements hook_field_widget_info().
 ** Anzeige auf der Feld-Einstellungsseite zum speziellen Inhaltstyp, zusätzlich zu den echten Feldern.
