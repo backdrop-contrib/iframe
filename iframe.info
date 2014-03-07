@@ -1,9 +1,9 @@
 name = Iframe
 description = Defines simple iframe field types.
 package = CCK
-version = 0.0.1
+version = 0.0.2
 core = 7.x
-dependencies[] = field
+dependencies[] = field_ui
 files[] = iframe.module
 files[] = iframe.install
 ;files[] = iframe.test
