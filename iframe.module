@@ -550,6 +550,19 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
       	'#element_validate' => array('iframe_validate_url'),
       );
 
+      $fclass = (isset($items[$delta]) && isset($items[$delta]['class']))
+          ? $items[$delta]['class']
+          : NULL;
+      $element['class'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Additional CSS Class'),
+        '#default_value' => $fclass,
+        '#description' => t('Multiple classes should be separated by spaces.<br />You can use a class "autoresize" if You want height-autoresizing for iframes of the same domain.'),
+        '#size' => 80,
+        '#weight' => 4,
+        '#delta' => $delta,
+      );
+
       break;
   }
   #drupal_set_message("<pre>" . htmlspecialchars(print_r(array($settings, $instance['settings']), TRUE)) . "</pre>", 'error');
@@ -579,5 +592,14 @@ function iframe_validate_url($element, &$form_state) {
   if (!empty($element['#value']) && !valid_url($element['#value'], TRUE)) {
     form_error($element, t('Invalid iframe URL.'));
   }
+}
+
+/**
+ * Support for local-domain iframes and autoresize the height
+ *
+ * Implementation of hook_init().
+ */
+function iframe_init() {
+  drupal_add_js(drupal_get_path('module', 'iframe') .'/iframe.js');
 }
 
