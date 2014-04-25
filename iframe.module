@@ -282,6 +282,9 @@ function iframe_field_formatter_info() {
 function iframe_field_formatter_view($object_type, $object, $field, $instance, $langcode, $items, $display) {
   $element = array();
 
+  if (!isset($item['display_title'])) {
+    $item['display_title'] = '';
+  }
   if ($display['type']=='iframe_formatter_default') {
       foreach ($items as $delta => $item) {
         $element[$delta]['#markup'] = '<p>' . iframe_formatter_default_helper($item, $delta) . '</p>';
