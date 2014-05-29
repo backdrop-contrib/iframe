@@ -590,8 +590,17 @@ function iframe_DISABLED_field_widget_error($element, $error) {
  * Function to validate the iframe URL.
  */
 function iframe_validate_url($element, &$form_state) {
-  if (!empty($element['#value']) && !valid_url($element['#value'], TRUE)) {
-    form_error($element, t('Invalid iframe URL.'));
+  if (!empty($element['#value'])) {
+    if (preg_match('#(^http|\://)#', $element['#value'])) {
+      if (!valid_url($element['#value'], TRUE)) {
+        form_error($element, t('Invalid iframe URL.'));
+      }
+    }
+    else { # not absolute url
+      if (!valid_url($element['#value'], FALSE)) {
+        form_error($element, t('Invalid iframe URL.'));
+      }
+    }
   }
 }
 
