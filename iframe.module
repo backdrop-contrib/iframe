@@ -326,6 +326,9 @@ function iframe_formatter_default_helper($item) {
   if (empty($item['url'])) {
     return '';
   }
+  if (!isset($item['display_title'])) {
+    $item['display_title'] = '';
+  }
   // Display all
   return iframe_iframe($item['display_title'], $item['url'], $item);
 }
