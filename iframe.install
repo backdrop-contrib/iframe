@@ -73,10 +73,6 @@ function iframe_field_schema($field) {
       );
     $schema['columns'] = $columns;
 
-    $schema['indexes'] = array(
-      'url' => array('url'),
-    );
-
     return $schema;
   }
 }
