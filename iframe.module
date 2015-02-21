@@ -17,10 +17,14 @@ define('iframe_DOMAINS', 'aero|arpa|biz|com|cat|coop|edu|gov|info|int|jobs|mil|m
 if (!defined('DEBUG_LEVEL')) {
   define('DEBUG_LEVEL', 4);
 }
-if (!function_exists('dmsg')) {
-  function dmsg($level, $text) {
-    if ($level <= DEBUG_LEVEL) {
-      error_log('iframe(' . $level . '): ' . $text);
+/* function "dpr" is from devel-module, we will use it if exists */
+function iframe_debug($level, $func = 'iframe', $debugvar = NULL) {
+  if ($level >= DEBUG_LEVEL) {
+    if (function_exists('dpr')) {
+      dpr($debugvar, NULL, $func);
+    }
+    else {
+      #error_log('[iframe(' . $level . ')] ' . $func . ' ' . print_r($debugvar, TRUE));
     }
   }
 }
@@ -59,22 +63,22 @@ function iframe_field_info() {
       'settings' => array(
         #'title' => '',
         #'url' => '',
-	#'width' => '',
-	#'height' => '',
-	'class' => 'field-iframe', /* class-name is the only attribute, which we use additive */
-	'frameborder' => 0, /* "0" or "yes" */
-	'scrolling' => 'auto',
-	'transparency' => 0,
+  #'width' => '',
+  #'height' => '',
+  'class' => 'field-iframe', /* class-name is the only attribute, which we use additive */
+  'frameborder' => 0, /* "0" or "yes" */
+  'scrolling' => 'auto',
+  'transparency' => 0,
       ),
       'instance_settings' => array(
         #'title' => '',
         #'url' => '',
-	'width' => '100%',
-	'height' => '800',
-	'class' => 'field-iframe-instance',
-	#'frameborder' => 0, /* "0" or "yes" */
-	#'scrolling' => 'auto',
-	#'transparency' => 0,
+  'width' => '100%',
+  'height' => '800',
+  'class' => 'field-iframe-instance',
+  #'frameborder' => 0, /* "0" or "yes" */
+  #'scrolling' => 'auto',
+  #'transparency' => 0,
       ),
       'default_widget' => 'iframe_widget_url',
       'default_formatter' => 'iframe_formatter_default',
@@ -192,25 +196,27 @@ function iframe_field_instance_settings_form($field, $instance) {
  *
  * Possible error codes:
  * - 'widthheight': The value should be between 1 and 9999, or between 1% and 100%
+ *
+ * (entity_type: "node", entity: node-object, field: (field-settings + field-inst-settings) ..., items: current-items-of-page)
  */
 function iframe_field_validate($entity_type, $entity, $field, $instance, $langcode, $items, &$errors) {
   foreach ($items as $delta => $item) {
     if (isset($item['url']) && !empty($item['url'])) {
-	    if (isset($item['width']) && (empty($item['width']) || (int)$item['width']<1)) {
-		    $errors[$field['field_name']][$langcode][$delta][] = array(
-				    'error' => '_iframe_widthsize_invalid',
-				    'message' => t('%name: the value of width may be no less than 1.', array('%name' => t($instance['label']))),
-				    );
-	    }
-	    if (isset($item['height']) && (empty($item['height']) || $item['height']<1)) {
-		    $errors[$field['field_name']][$langcode][$delta][] = array(
-				    'error' => '_iframe_heightsize_invalid',
-				    'message' => t('%name: the value of height may be no less than 1.', array('%name' => t($instance['label']))),
-				    );
-	    }
+      if (isset($item['width']) && (empty($item['width']) || (int)$item['width']<1)) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => '_iframe_widthsize_invalid',
+          'message' => t('%name: the value of width may be no less than 1.', array('%name' => t($instance['label']))),
+        );
+      }
+      if (isset($item['height']) && (empty($item['height']) || $item['height']<1)) {
+        $errors[$field['field_name']][$langcode][$delta][] = array(
+          'error' => '_iframe_heightsize_invalid',
+          'message' => t('%name: the value of height may be no less than 1.', array('%name' => t($instance['label']))),
+        );
+      }
     }
   }
-  #drupal_set_message("<pre>".htmlspecialchars(print_r($errors, TRUE))."</pre>", 'error');
+  iframe_debug(1, 'iframe_field_validate errors', $errors);
 }
 
 /**
@@ -218,6 +224,7 @@ function iframe_field_validate($entity_type, $entity, $field, $instance, $langco
  *
  * We have to populate all missing default-values which were defined, but not edited by the current author
  * ($entity can be manipulated, because it shows only to the object)
+ * (entity_type: "node", entity: node-object, field: (field-settings + field-inst-settings) ..., items: current-items-of-page)
  */
 function iframe_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
   $settings = $instance['settings'];
@@ -229,8 +236,11 @@ function iframe_field_presave($entity_type, $entity, $field, $instance, $langcod
         $items[$delta] = $items[$delta] + $settings;
       }
     }
+    iframe_debug(2, 'iframe_field_presave', array('entity_type'=>$entity_type, 'entity'=>$entity, 'field'=>$field, 'instance'=>$instance, 'items'=>$items));
   }
-  #drupal_set_message("<pre>".htmlspecialchars(print_r(array('function' => 'presave', 'items' => $items, 'instance' => $instance), TRUE))."</pre>", 'error');
+}
+function iframe_field_attach_presave($entity_type, $entity) {
+  iframe_debug(2, 'iframe_field_attach_presave', array('entity_type' => $entity_type, 'entity' => $entity));
 }
 
 
@@ -428,23 +438,23 @@ function iframe_iframe($text, $path, $options = FALSE) {
 function iframe_field_widget_info() {
   return array(
     'iframe_widget_url' => array(
-	  'label' => t('URL only'),
-	  'field types' => array('iframe'),
+    'label' => t('URL only'),
+    'field types' => array('iframe'),
           'settings' => array('size' => 255),
           'weight' => 1,
-	),
+  ),
     'iframe_widget_urlheight' => array(
-	  'label' => t('URL with height'),
-	  'field types' => array('iframe'),
+    'label' => t('URL with height'),
+    'field types' => array('iframe'),
           'settings' => array('size' => 255),
           'weight' => 2,
-	),
+  ),
     'iframe_widget_urlwidthheight' => array(
-	  'label' => t('URL with width and height'),
-	  'field types' => array('iframe'),
+    'label' => t('URL with width and height'),
+    'field types' => array('iframe'),
           'settings' => array('size' => 255),
           'weight' => 3,
-	),
+  ),
   );
 }
 
@@ -455,7 +465,7 @@ function iframe_DISABLED_field_widget_settings_form($field, $instance) {
   $widget = $instance['widget'];
   $settings = $widget['settings'];
 
-  #drupal_set_message("<pre>" . htmlspecialchars(print_r(array('function' => 'iframe_field_widget_settings_form', $instance), TRUE)) . "</pre>", 'error');
+  #iframe_debug(1, 'iframe_field_widget_settings_form', array('field' => $field, 'instance' => $instance));
   $form = array();
 /*
     $form['field_widget_settings_form'] = array(
@@ -531,7 +541,7 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
         '#size' => 4,
         '#weight' => 3,
         '#delta' => $delta,
-      	'#element_validate' => array('element_validate_integer_positive'),
+        '#element_validate' => array('element_validate_integer_positive'),
       );
       // no "break" intentionally, fall through
 
@@ -548,8 +558,19 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
         '#size' => 80,
         '#weight' => 1,
         '#delta' => $delta,
-      	'#element_validate' => array('iframe_validate_url'),
+        '#element_validate' => array('iframe_validate_url'),
       );
+
+
+      // Add to form
+      // Display the list of available placeholders if token module is installed.
+      if (module_exists('token')) {
+        $element['url']['token_help'] = array(
+          '#theme' => 'token_tree',
+          '#token_types' => array('node', 'user'),
+        );
+        $element['url']['#submit'][] = iframe_form_submit;
+      }
 
       $fclass = (isset($items[$delta]) && isset($items[$delta]['class']))
           ? $items[$delta]['class']
@@ -566,7 +587,7 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
 
       break;
   }
-  #drupal_set_message("<pre>" . htmlspecialchars(print_r(array($settings, $instance['settings']), TRUE)) . "</pre>", 'error');
+  #iframe_debug(2, 'iframe_field_widget_form', array('settings' => $settings, 'instance-settings' => $instance['settings']));
   return $element;
 }
 
@@ -578,10 +599,10 @@ function iframe_DISABLED_field_widget_error($element, $error) {
   switch ($error['error']) {
     case 'widthsize':
       form_error($element['width'], $error['message']);
-	  break;
+    break;
     case 'heightsize':
       form_error($element['height'], $error['message']);
-	  break;
+    break;
   }
 }
 
@@ -613,3 +634,11 @@ function iframe_init() {
   drupal_add_js(drupal_get_path('module', 'iframe') .'/iframe.js');
 }
 
+/**
+ * Token Support for field "url" and "title"
+ */
+function iframe_form_submit($form, &$form_state) {
+  iframe_debug(2, 'iframe_form_submit', array('form' => $form));
+  // Call token replace on the text field passing args into the second parrameter.
+  $form['iframe'] = token_replace($form['iframe'], array('node' => $form['node'], 'user' => $GLOBALS['user']));
+}
