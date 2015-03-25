@@ -525,6 +525,7 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
         '#title' => t('width'),
         '#default_value' => $fwidth,
         '#size' => 4,
+        '#maxlength' => 4,
         '#weight' => 2,
         '#delta' => $delta,
       );
@@ -542,6 +543,7 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
         '#title' => t('height'),
         '#default_value' => $fheight,
         '#size' => 4,
+        '#maxlength' => 4,
         '#weight' => 3,
         '#delta' => $delta,
         '#element_validate' => array('element_validate_integer_positive'),
@@ -559,6 +561,7 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
         '#placeholder' => 'http://',
         '#default_value' => $furl,
         '#size' => 80,
+        '#maxlength' => 1024,
         '#weight' => 1,
         '#delta' => $delta,
         '#element_validate' => array('iframe_validate_url'),
