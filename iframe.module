@@ -63,24 +63,24 @@ function iframe_field_info() {
       'settings' => array(
         #'title' => '',
         #'url' => '',
-  #'width' => '',
-  #'height' => '',
-  'class' => 'field-iframe', /* class-name is the only attribute, which we use additive */
-  'frameborder' => 0, /* "0" or "yes" */
-  'scrolling' => 'auto',
-  'transparency' => 0,
-  'tokensupport' => 0,
+        #'width' => '',
+        #'height' => '',
+        'class' => 'field-iframe', /* class-name is the only attribute, which we use additive */
+        'frameborder' => 0, /* "0" or "yes" */
+        'scrolling' => 'auto',
+        'transparency' => 0,
+        'tokensupport' => 0,
       ),
       'instance_settings' => array(
         #'title' => '',
         #'url' => '',
-  'width' => '100%',
-  'height' => '800',
-  'class' => 'field-iframe-instance',
-  #'frameborder' => 0, /* "0" or "yes" */
-  #'scrolling' => 'auto',
-  #'transparency' => 0,
-  #'tokensupport' => 0,
+        'width' => '100%',
+        'height' => '800',
+        'class' => 'field-iframe-instance',
+        #'frameborder' => 0, /* "0" or "yes" */
+        #'scrolling' => 'auto',
+        #'transparency' => 0,
+        #'tokensupport' => 0,
       ),
       'default_widget' => 'iframe_widget_url',
       'default_formatter' => 'iframe_formatter_default',
@@ -135,7 +135,7 @@ function iframe_field_settings_form($field, $instance, $has_data) {
       '#description' => t('Are tokens allowed for users to use in title or url field?'),
     );
     if (! module_exists('token')) {
-        $form['tokensupport']['#description'] .= ' ' . t('Attention: token module is not enabled currently!');
+      $form['tokensupport']['#description'] .= ' ' . t('Attention: token module is not enabled currently!');
     }
   }
 
@@ -206,7 +206,7 @@ function iframe_field_instance_settings_form($field, $instance) {
       '#description' => t('Are tokens allowed for users to use in title or url field?'),
     );
     if (! module_exists('token')) {
-        $form['tokensupport']['#description'] .= ' ' . t('Attention: token module is not enabled currently!');
+      $form['tokensupport']['#description'] .= ' ' . t('Attention: token module is not enabled currently!');
     }
   }
 
@@ -249,8 +249,8 @@ function iframe_field_validate($entity_type, $entity, $field, $instance, $langco
  * (entity_type: "node", entity: node-object, field: (field-settings + field-inst-settings) ..., items: current-items-of-page)
  */
 function iframe_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
-    $settings = $instance['settings'];
-    $settings += $field['settings'];
+  $settings = $instance['settings'];
+  $settings += $field['settings'];
 
   if ($field['type'] == 'iframe') {
     foreach ($items as $delta => $item) {
@@ -319,24 +319,24 @@ function iframe_field_formatter_view($object_type, $object, $field, $instance, $
     $item['display_title'] = '';
   }
   if ($display['type']=='iframe_formatter_default') {
-      foreach ($items as $delta => $item) {
-        $element[$delta]['#markup'] = '<p>' . iframe_formatter_default_helper($item, $delta) . '</p>';
-      }
+    foreach ($items as $delta => $item) {
+      $element[$delta]['#markup'] = '<p>' . iframe_formatter_default_helper($item, $delta) . '</p>';
+    }
   }
   elseif ($display['type']=='iframe_formatter_only') {
-      foreach ($items as $delta => $item) {
-        $element[$delta]['#markup'] = '<p>' . iframe_formatter_only_helper($item, $delta) . '</p>';
-      }
+    foreach ($items as $delta => $item) {
+      $element[$delta]['#markup'] = '<p>' . iframe_formatter_only_helper($item, $delta) . '</p>';
+    }
   }
   elseif ($display['type']=='iframe_formatter_asurl') {
-      foreach ($items as $delta => $item) {
-        $element[$delta]['#markup'] = '<p>' . iframe_formatter_asurl_helper($item, $delta) . '</p>';
-      }
+    foreach ($items as $delta => $item) {
+      $element[$delta]['#markup'] = '<p>' . iframe_formatter_asurl_helper($item, $delta) . '</p>';
+    }
   }
   elseif ($display['type']=='iframe_formatter_asurlwithuri') {
-      foreach ($items as $delta => $item) {
-        $element[$delta]['#markup'] = '<p>' . iframe_formatter_asurlwithuri_helper($item, $delta) . '</p>';
-      }
+    foreach ($items as $delta => $item) {
+      $element[$delta]['#markup'] = '<p>' . iframe_formatter_asurlwithuri_helper($item, $delta) . '</p>';
+    }
   }
   return $element;
 }
@@ -448,16 +448,15 @@ function iframe_iframe($text, $path, $options = FALSE) {
   $options_link = array(); $options_link['attributes'] = array();
   $options_link['attributes']['title'] = $options['title'];
 
-  iframe_debug(4, 'opt', $options);
   if (module_exists('token')) {
-      // Token Support for field "url" and "title"
-      $tokensupport = !empty($options['tokensupport'])? (int)$options['tokensupport'] : 0;
-      if ($tokensupport > 0) {
-        $text = token_replace($path, array('node' => $GLOBALS['node'], 'user' => $GLOBALS['user']));
-      }
-      if ($tokensupport > 1) {
-        $path = token_replace($path, array('node' => $GLOBALS['node'], 'user' => $GLOBALS['user']));
-      }
+    // Token Support for field "url" and "title"
+    $tokensupport = !empty($options['tokensupport'])? (int)$options['tokensupport'] : 0;
+    if ($tokensupport > 0) {
+      $text = token_replace($text, array('node' => $GLOBALS['node'], 'user' => $GLOBALS['user']));
+    }
+    if ($tokensupport > 1) {
+      $path = token_replace($path, array('node' => $GLOBALS['node'], 'user' => $GLOBALS['user']));
+    }
   }
 
   return (empty($text)? '' : '<div class="iframe_title">' . ($options['html'] ? $text : check_plain($text)) . '</div>') .
@@ -481,20 +480,20 @@ function iframe_field_widget_info() {
     'iframe_widget_url' => array(
     'label' => t('URL only'),
     'field types' => array('iframe'),
-          'settings' => array('size' => 255),
-          'weight' => 1,
+    'settings' => array('size' => 255),
+    'weight' => 1,
   ),
     'iframe_widget_urlheight' => array(
     'label' => t('URL with height'),
     'field types' => array('iframe'),
-          'settings' => array('size' => 255),
-          'weight' => 2,
+    'settings' => array('size' => 255),
+    'weight' => 2,
   ),
     'iframe_widget_urlwidthheight' => array(
     'label' => t('URL with width and height'),
     'field types' => array('iframe'),
-          'settings' => array('size' => 255),
-          'weight' => 3,
+    'settings' => array('size' => 255),
+    'weight' => 3,
   ),
   );
 }
@@ -509,13 +508,13 @@ function iframe_DISABLED_field_widget_settings_form($field, $instance) {
   #iframe_debug(1, 'iframe_field_widget_settings_form', array('field' => $field, 'instance' => $instance));
   $form = array();
 /*
-    $form['field_widget_settings_form'] = array(
-      '#type' => 'textfield',
-      '#title' => t('field_widget_settings_form'),
-      '#default_value' => $settings['width'],
-      '#required' => TRUE,
-      //'#element_validate' => array('element_validate_integer_positive'),
-    );
+  $form['field_widget_settings_form'] = array(
+    '#type' => 'textfield',
+    '#title' => t('field_widget_settings_form'),
+    '#default_value' => $settings['width'],
+    '#required' => TRUE,
+    //'#element_validate' => array('element_validate_integer_positive'),
+  );
 */
 
   return $form;
@@ -554,11 +553,11 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
   switch ($instance['widget']['type']) {
     case 'iframe_widget_urlwidthheight':
       $fwidth = (isset($items['delta']) && isset($items[$delta]['width']))
-          ? $items[$delta]['width']
-          : (!empty($settings['width'])
-              ? $settings['width']
-              : NULL
-          );
+        ? $items[$delta]['width']
+        : (!empty($settings['width'])
+          ? $settings['width']
+          : NULL
+        );
       $element['width'] = array(
         '#type' => 'textfield',
         '#title' => t('width'),
@@ -572,11 +571,11 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
 
     case 'iframe_widget_urlheight':
       $fheight = (isset($items[$delta]) && isset($items[$delta]['height']))
-          ? $items[$delta]['height']
-          : (!empty($settings['height'])
-              ? $settings['height']
-              : NULL
-          );
+        ? $items[$delta]['height']
+        : (!empty($settings['height'])
+          ? $settings['height']
+          : NULL
+        );
       $element['height'] = array(
         '#type' => 'textfield',
         '#title' => t('height'),
@@ -592,8 +591,8 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
     case 'iframe_widget_urlonly':
     default:
       $furl = (isset($items[$delta]) && isset($items[$delta]['url']))
-          ? $items[$delta]['url']
-          : NULL;
+        ? $items[$delta]['url']
+        : NULL;
       $element['url'] = array(
         '#type' => 'textfield',
         '#title' => t('IFrame URL'),
@@ -607,8 +606,8 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
       );
 
       $fclass = (isset($items[$delta]) && isset($items[$delta]['class']))
-          ? $items[$delta]['class']
-          : NULL;
+        ? $items[$delta]['class']
+        : NULL;
       $element['class'] = array(
         '#type' => 'textfield',
         '#title' => t('Additional CSS Class'),
@@ -622,19 +621,19 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
       break;
   }
 
-      // Display the list of available placeholders if token module is installed.
-      if (module_exists('token')) {
-        $element['token_tree'] = array(
-          '#theme' => 'token_tree',
-          '#token_types' => array('node', 'user'),
-        );
-        $element['url']['#description'] = t('Field does support tokens.');
-      }
-      else {
-          $element['token_tree'] = array(
-              '#markup' => '<p>' . t('Enable the <a href="@drupal-token">Token module</a> to view the available token browser.', array('@drupal-token' => 'http://drupal.org/project/token')) . '</p>',
-          );
-      }
+  // Display the list of available placeholders if token module is installed.
+  if (module_exists('token')) {
+    $element['token_tree'] = array(
+      '#theme' => 'token_tree',
+      '#token_types' => array('node', 'user'),
+    );
+    $element['url']['#description'] = t('Field does support tokens.');
+  }
+  else {
+    $element['token_tree'] = array(
+      '#markup' => '<p>' . t('Enable the <a href="@drupal-token">Token module</a> to view the available token browser.', array('@drupal-token' => 'http://drupal.org/project/token')) . '</p>',
+    );
+  }
 
   #iframe_debug(2, 'iframe_field_widget_form', array('settings' => $settings, 'instance-settings' => $instance['settings']));
   return $element;
