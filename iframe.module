@@ -69,6 +69,7 @@ function iframe_field_info() {
   'frameborder' => 0, /* "0" or "yes" */
   'scrolling' => 'auto',
   'transparency' => 0,
+  'tokensupport' => 0,
       ),
       'instance_settings' => array(
         #'title' => '',
@@ -79,6 +80,7 @@ function iframe_field_info() {
   #'frameborder' => 0, /* "0" or "yes" */
   #'scrolling' => 'auto',
   #'transparency' => 0,
+  #'tokensupport' => 0,
       ),
       'default_widget' => 'iframe_widget_url',
       'default_formatter' => 'iframe_formatter_default',
@@ -125,6 +127,16 @@ function iframe_field_settings_form($field, $instance, $has_data) {
       '#default_value' => !empty($settings['transparency'])? $settings['transparency'] : '0',
       '#description' => t('Allow transparency per CSS in the outer iframe tag. You have to set background-color:transparent in Your IFrame too for the body tag!'),
     );
+    $form['tokensupport'] = array(
+      '#type' => 'select',
+      '#title' => t('Token Support'),
+      '#options' => array('0' => t('no tokens allowed'), '1' => t('tokens only in title field'), '2' => t('tokens for title and url field')),
+      '#default_value' => !empty($settings['tokensupport'])? $settings['tokensupport'] : '0',
+      '#description' => t('Are tokens allowed for users to use in title or url field?'),
+    );
+    if (! module_exists('token')) {
+        $form['tokensupport']['#description'] .= ' ' . t('Attention: token module is not enabled currently!');
+    }
   }
 
   return $form;
@@ -186,6 +198,16 @@ function iframe_field_instance_settings_form($field, $instance) {
       '#default_value' => !empty($settings['transparency'])? $settings['transparency'] : (!empty($field_settings['transparency'])? $field_settings['transparency'] : 0),
       '#description' => t('Allow transparency per CSS in the outer iframe tag. You have to set background-color:transparent in Your IFrame too for the body tag!'),
     );
+    $form['tokensupport'] = array(
+      '#type' => 'select',
+      '#title' => t('Token Support'),
+      '#options' => array('0' => t('no tokens allowed'), '1' => t('tokens only in title field'), '2' => t('tokens for title and url field')),
+      '#default_value' => !empty($settings['tokensupport'])? $settings['tokensupport'] : (!empty($field_settings['tokensupport'])? $field_settings['tokensupport'] : '0'),
+      '#description' => t('Are tokens allowed for users to use in title or url field?'),
+    );
+    if (! module_exists('token')) {
+        $form['tokensupport']['#description'] .= ' ' . t('Attention: token module is not enabled currently!');
+    }
   }
 
   return $form;
@@ -227,7 +249,8 @@ function iframe_field_validate($entity_type, $entity, $field, $instance, $langco
  * (entity_type: "node", entity: node-object, field: (field-settings + field-inst-settings) ..., items: current-items-of-page)
  */
 function iframe_field_presave($entity_type, $entity, $field, $instance, $langcode, &$items) {
-  $settings = $instance['settings'];
+    $settings = $instance['settings'];
+    $settings += $field['settings'];
 
   if ($field['type'] == 'iframe') {
     foreach ($items as $delta => $item) {
@@ -398,6 +421,9 @@ function iframe_iframe($text, $path, $options = FALSE) {
   if (!isset($options['transparency']) || $options['transparency'] < 0) {
     $options['transparency'] = 0;
   }
+  if (!isset($options['tokensupport']) || $options['tokensupport'] < 0) {
+    $options['tokensupport'] = 0;
+  }
 
   $htmlid = '';
   if (isset($options['html-id']) && !empty($options['html-id'])) {
@@ -421,6 +447,18 @@ function iframe_iframe($text, $path, $options = FALSE) {
   }
   $options_link = array(); $options_link['attributes'] = array();
   $options_link['attributes']['title'] = $options['title'];
+
+  iframe_debug(4, 'opt', $options);
+  if (module_exists('token')) {
+      // Token Support for field "url" and "title"
+      $tokensupport = !empty($options['tokensupport'])? (int)$options['tokensupport'] : 0;
+      if ($tokensupport > 0) {
+        $text = token_replace($path, array('node' => $GLOBALS['node'], 'user' => $GLOBALS['user']));
+      }
+      if ($tokensupport > 1) {
+        $path = token_replace($path, array('node' => $GLOBALS['node'], 'user' => $GLOBALS['user']));
+      }
+  }
 
   return (empty($text)? '' : '<div class="iframe_title">' . ($options['html'] ? $text : check_plain($text)) . '</div>') .
     '<iframe src="' . check_url(url($path, $options)) . '"' . drupal_attributes($options) .
@@ -492,6 +530,7 @@ function iframe_DISABLED_field_widget_settings_form($field, $instance) {
  * (Step 3)
  */
 function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  #iframe_debug(2, 'iframe_field_widget_form', $form);
   $base = $element;
 
   $widget = $instance['widget'];
@@ -567,17 +606,6 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
         '#element_validate' => array('iframe_validate_url'),
       );
 
-
-      // Add to form
-      // Display the list of available placeholders if token module is installed.
-      if (module_exists('token')) {
-        $element['url']['token_help'] = array(
-          '#theme' => 'token_tree',
-          '#token_types' => array('node', 'user'),
-        );
-        $element['url']['#submit'][] = iframe_form_submit;
-      }
-
       $fclass = (isset($items[$delta]) && isset($items[$delta]['class']))
           ? $items[$delta]['class']
           : NULL;
@@ -593,6 +621,21 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
 
       break;
   }
+
+      // Display the list of available placeholders if token module is installed.
+      if (module_exists('token')) {
+        $element['token_tree'] = array(
+          '#theme' => 'token_tree',
+          '#token_types' => array('node', 'user'),
+        );
+        $element['url']['#description'] = t('Field does support tokens.');
+      }
+      else {
+          $element['token_tree'] = array(
+              '#markup' => '<p>' . t('Enable the <a href="@drupal-token">Token module</a> to view the available token browser.', array('@drupal-token' => 'http://drupal.org/project/token')) . '</p>',
+          );
+      }
+
   #iframe_debug(2, 'iframe_field_widget_form', array('settings' => $settings, 'instance-settings' => $instance['settings']));
   return $element;
 }
@@ -640,11 +683,3 @@ function iframe_init() {
   drupal_add_js(drupal_get_path('module', 'iframe') .'/iframe.js');
 }
 
-/**
- * Token Support for field "url" and "title"
- */
-function iframe_form_submit($form, &$form_state) {
-  iframe_debug(2, 'iframe_form_submit', array('form' => $form));
-  // Call token replace on the text field passing args into the second parrameter.
-  $form['iframe'] = token_replace($form['iframe'], array('node' => $form['node'], 'user' => $GLOBALS['user']));
-}
