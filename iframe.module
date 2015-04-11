@@ -631,17 +631,20 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
   }
 
   // Display the list of available placeholders if token module is installed.
-  if (module_exists('token')) {
-    $element['token_tree'] = array(
-      '#theme' => 'token_tree',
-      '#token_types' => array('node', 'user'),
-    );
-    $element['url']['#description'] = t('Field does support tokens.');
-  }
-  else {
-    $element['token_tree'] = array(
-      '#markup' => '<p>' . t('Enable the <a href="@drupal-token">Token module</a> to view the available token browser.', array('@drupal-token' => 'http://drupal.org/project/token')) . '</p>',
-    );
+  $tokensupport = !empty($settings['tokensupport'])? (int)$settings['tokensupport'] : 0;
+  if ($tokensupport > 0) {
+    if (module_exists('token')) {
+      $element['token_tree'] = array(
+        '#theme' => 'token_tree',
+        '#token_types' => array('node', 'user'),
+      );
+      $element['url']['#description'] = t('Field does support tokens.');
+    }
+    else {
+      $element['token_tree'] = array(
+        '#markup' => '<p>' . t('Enable the <a href="@drupal-token">Token module</a> to view the available token browser.', array('@drupal-token' => 'http://drupal.org/project/token')) . '</p>',
+      );
+    }
   }
 
   #iframe_debug(2, 'iframe_field_widget_form', array('settings' => $settings, 'instance-settings' => $instance['settings']));
