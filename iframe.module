@@ -177,6 +177,12 @@ function iframe_field_instance_settings_form($field, $instance) {
       '#default_value' => !empty($settings['class'])? $settings['class'] : (!empty($field_settings['class'])? $field_settings['class'] : ''),
       '#description' => t('When output, this iframe will have this class attribute. Multiple classes should be separated by spaces.'),
     );
+    $form['expose_class'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Expose Additional CSS Class'),
+      '#default_value' => isset($settings['expose_class'])? (int)$settings['expose_class'] : 1,
+      '#description' => t('Allow author to specify an additional class attribute for this iframe.'),
+    );
     $form['frameborder'] = array(
       '#type' => 'select',
       '#title' => t('Frameborder'),
@@ -608,15 +614,18 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
       $fclass = (isset($items[$delta]) && isset($items[$delta]['class']))
         ? $items[$delta]['class']
         : NULL;
-      $element['class'] = array(
-        '#type' => 'textfield',
-        '#title' => t('Additional CSS Class'),
-        '#default_value' => $fclass,
-        '#description' => t('Multiple classes should be separated by spaces.<br />You can use a class "autoresize" if You want height-autoresizing for iframes of the same domain.'),
-        '#size' => 80,
-        '#weight' => 4,
-        '#delta' => $delta,
-      );
+      $expose_class = isset($settings['expose_class'])? $settings['expose_class'] : 1;
+      if ($expose_class) {
+        $element['class'] = array(
+          '#type' => 'textfield',
+          '#title' => t('Additional CSS Class'),
+          '#default_value' => $fclass,
+          '#description' => t('Multiple classes should be separated by spaces.<br />You can use a class "autoresize" if You want height-autoresizing for iframes of the same domain.'),
+          '#size' => 80,
+          '#weight' => 4,
+          '#delta' => $delta,
+        );
+      }
 
       break;
   }
