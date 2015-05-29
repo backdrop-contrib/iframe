@@ -110,6 +110,13 @@ function iframe_addorchange_column($field_suffix, $spec) {
   $fields = iframe_get_mymodule_fields();
 
   foreach ($fields as $field) {
+    if (
+        isset($field['storage']) && isset($field['storage']['type'])
+        && 0 !== strcmp($field['storage']['type'], 'field_sql_storage')
+    ) {
+        drupal_set_message('iframe: cannot change field ' . $field['field_name'] . 'because of different storage_type: ' . $field['storage']['type'], 'warn');
+        continue;
+    }
     $table_prefixes = array(
       _field_sql_storage_tablename($field), 
       _field_sql_storage_revision_tablename($field)
