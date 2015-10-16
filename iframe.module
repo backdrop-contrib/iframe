@@ -14,16 +14,21 @@ define('iframe_FRONT', 'front');
 define('iframe_EMAIL', 'email');
 define('iframe_DOMAINS', 'aero|arpa|biz|com|cat|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|mobi|local');
 
+define('DEBUG_LEVEL', 0);
 if (!defined('DEBUG_LEVEL')) {
   define('DEBUG_LEVEL', 4);
 }
 /* function "dpr" is from devel-module, we will use it if exists */
 function iframe_debug($level, $func = 'iframe', $debugvar = NULL) {
-  if ($level >= DEBUG_LEVEL) {
-    if (function_exists('dpr')) {
-      dpr($debugvar, NULL, $func);
+  if ($level <= DEBUG_LEVEL) {
+    if (!function_exists('dvr') && is_readable('../devel/devel.module')) {
+      include_once('../devel/devel.module');
+    }
+    if (function_exists('dvr')) {
+      dvr($debugvar, NULL, $func);
     }
     else {
+      drupal_set_message('[iframe(' . $level . ')] ' . $func . ' ' . print_r($debugvar, TRUE), 'warning');
       #error_log('[iframe(' . $level . ')] ' . $func . ' ' . print_r($debugvar, TRUE));
     }
   }
@@ -319,11 +324,22 @@ function iframe_field_formatter_info() {
  * Implements hook_field_formatter_view().
  */
 function iframe_field_formatter_view($object_type, $object, $field, $instance, $langcode, $items, $display) {
+  // object_type = node, object = Article-node-object
+  iframe_debug(2, 'iframe_field_formatter_view', array('field' => $field, 'instance' => $instance, 'langcode' => $langcode, 'items' => '...', 'display' => $display));
   $element = array();
+  $settings = $instance['settings'];
 
-  if (!isset($item['display_title'])) {
-    $item['display_title'] = '';
+  $class = !empty($settings['class'])? $settings['class'] : '';
+  foreach ($items as $delta => $item) {
+    $iclass = isset($item['class'])? $item['class'] : '';
+    if (isset($settings['expose_class']) && $settings['expose_class']>0) {
+        $items[$delta]['class'] = trim($class . " " . $iclass);
+    }
+    else {
+        $items[$delta]['class'] = trim($class);
+    }
   }
+
   if ($display['type']=='iframe_formatter_default') {
     foreach ($items as $delta => $item) {
       $element[$delta]['#markup'] = '<p>' . iframe_formatter_default_helper($item, $delta) . '</p>';
@@ -355,11 +371,11 @@ function iframe_formatter_default_helper($item) {
   if (empty($item['url'])) {
     return '';
   }
-  if (!isset($item['display_title'])) {
-    $item['display_title'] = '';
+  if (!isset($item['title'])) {
+    $item['title'] = '';
   }
   // Display all
-  return iframe_iframe($item['display_title'], $item['url'], $item);
+  return iframe_iframe($item['title'], $item['url'], $item);
 }
 
 /**
@@ -383,7 +399,7 @@ function iframe_formatter_asurl_helper($item) {
     return '';
   }
   // Display all
-  $linktext = empty($item['display_title'])? $item['url'] : $item['display_title'];
+  $linktext = empty($item['title'])? $item['url'] : $item['title'];
   return l($linktext, $item['url'], $item);
 }
 
@@ -405,6 +421,7 @@ function iframe_formatter_asurlwithuri_helper($item) {
  * form the iframe code
  */
 function iframe_iframe($text, $path, $options = FALSE) {
+  iframe_debug(1, 'iframe_iframe item', $options);
   if (!$options) {
     $options = array();
   }
@@ -465,11 +482,17 @@ function iframe_iframe($text, $path, $options = FALSE) {
     }
   }
 
-  return (empty($text)? '' : '<div class="iframe_title">' . ($options['html'] ? $text : check_plain($text)) . '</div>') .
-    '<iframe src="' . check_url(url($path, $options)) . '"' . drupal_attributes($options) .
-    $htmlid .
-    '>' .
-    t('Your browser does not support iframes. But You can use the following link.') . ' ' . l('Link', url($path, $options), $options_link) . '</iframe>';
+  return 
+    '<div class="' . (isset($options['class'])? check_plain($options['class']) : '') . '">'
+      . (empty($text)? '' : '<h3 class="iframe_title">' . ($options['html'] ? $text : check_plain($text)) . '</h3>')
+      . '<iframe src="' . check_url(url($path, $options)) . '"'
+        . drupal_attributes($options)
+        . $htmlid
+      . '>'
+      . t('Your browser does not support iframes. But You can use the following link.') . ' ' . l('Link', url($path, $options), $options_link)
+      . '</iframe>'
+    . '</div>'
+  ;
 }
 
 /**************************************************************************
@@ -479,6 +502,7 @@ function iframe_iframe($text, $path, $options = FALSE) {
 /**
  * Implements hook_field_widget_info().
  * shows the "Widget" select for this special field type on the manage-fields page of content-type
+ * The type of form element you would like to present to the user when creating this field in the test type.
  * (Step 1)
  */
 function iframe_field_widget_info() {
@@ -511,7 +535,7 @@ function iframe_DISABLED_field_widget_settings_form($field, $instance) {
   $widget = $instance['widget'];
   $settings = $widget['settings'];
 
-  #iframe_debug(1, 'iframe_field_widget_settings_form', array('field' => $field, 'instance' => $instance));
+  iframe_debug(1, 'iframe_field_widget_settings_form', array('field' => $field, 'instance' => $instance));
   $form = array();
 /*
   $form['field_widget_settings_form'] = array(
@@ -535,7 +559,7 @@ function iframe_DISABLED_field_widget_settings_form($field, $instance) {
  * (Step 3)
  */
 function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
-  #iframe_debug(2, 'iframe_field_widget_form', $form);
+  iframe_debug(2, 'iframe_field_widget_form', $form);
   $base = $element;
 
   $widget = $instance['widget'];
@@ -570,7 +594,7 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
         '#default_value' => $fwidth,
         '#size' => 4,
         '#maxlength' => 4,
-        '#weight' => 2,
+        '#weight' => 4,
         '#delta' => $delta,
       );
       // no "break" intentionally, fall through
@@ -588,7 +612,7 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
         '#default_value' => $fheight,
         '#size' => 4,
         '#maxlength' => 4,
-        '#weight' => 3,
+        '#weight' => 5,
         '#delta' => $delta,
         '#element_validate' => array('element_validate_integer_positive'),
       );
@@ -596,6 +620,25 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
 
     case 'iframe_widget_urlonly':
     default:
+        //
+      break;
+  }
+
+      $title = (isset($items[$delta]) && isset($items[$delta]['title']))
+        ? $items[$delta]['title']
+        : NULL;
+      $element['title'] = array(
+        '#type' => 'textfield',
+        '#title' => t('IFrame Title'),
+        '#placeholder' => '',
+        '#default_value' => $title,
+        '#size' => 80,
+        '#maxlength' => 1024,
+        '#weight' => 2,
+        '#delta' => $delta,
+        //'#element_validate' => array('text'),
+      );
+
       $furl = (isset($items[$delta]) && isset($items[$delta]['url']))
         ? $items[$delta]['url']
         : NULL;
@@ -622,23 +665,23 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
           '#default_value' => $fclass,
           '#description' => t('Multiple classes should be separated by spaces.<br />You can use a class "autoresize" if You want height-autoresizing for iframes of the same domain.'),
           '#size' => 80,
-          '#weight' => 4,
+          '#weight' => 5,
           '#delta' => $delta,
+          #'#element_validate' => array('iframe_validate_additionalclass'),
         );
       }
-
-      break;
-  }
 
   // Display the list of available placeholders if token module is installed.
   $tokensupport = !empty($settings['tokensupport'])? (int)$settings['tokensupport'] : 0;
   if ($tokensupport > 0) {
     if (module_exists('token')) {
       $element['token_tree'] = array(
-        '#theme' => 'token_tree',
+        '#theme' => 'token_tree_link',
         '#token_types' => array('node', 'user'),
+        '#weight' => 3,
       );
-      $element['url']['#description'] = t('Field does support tokens.');
+      $element['url']['#description'] .= t('Field does support tokens.');
+      $element['title']['#description'] .= t('Field does support tokens.');
     }
     else {
       $element['token_tree'] = array(
@@ -647,7 +690,7 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
     }
   }
 
-  #iframe_debug(2, 'iframe_field_widget_form', array('settings' => $settings, 'instance-settings' => $instance['settings']));
+  iframe_debug(2, 'iframe_field_widget_form', array('settings' => $settings, 'instance-settings' => $instance['settings']));
   return $element;
 }
 
@@ -684,6 +727,7 @@ function iframe_validate_url($element, &$form_state) {
     }
   }
 }
+
 
 /**
  * Support for local-domain iframes and autoresize the height
