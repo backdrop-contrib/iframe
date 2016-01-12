@@ -14,24 +14,24 @@ define('iframe_FRONT', 'front');
 define('iframe_EMAIL', 'email');
 define('iframe_DOMAINS', 'aero|arpa|biz|com|cat|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|mobi|local');
 
-define('DEBUG_LEVEL', 0);
+define('DEBUG_LEVEL', 1);
 if (!defined('DEBUG_LEVEL')) {
   define('DEBUG_LEVEL', 4);
 }
 /* function "dpr" is from devel-module, we will use it if exists */
 function iframe_debug($level, $func = 'iframe', $debugvar = NULL) {
-  if ($level <= DEBUG_LEVEL) {
-    if (!function_exists('dvr') && is_readable('../devel/devel.module')) {
-      include_once('../devel/devel.module');
+    if ($level <= DEBUG_LEVEL) {
+        $debugtitle = '[iframe(' . $level . ')] ' . $func;
+        if (!function_exists('kpr') && is_readable('../devel/devel.module')) {
+            include_once('../devel/devel.module');
+        }
+        if (function_exists('kpr')) {
+            kpr(array($debugtitle, $debugvar), NULL, $debugtitle);
+        }
+        else {
+            drupal_set_message($debugtitle . ' ' . print_r($debugvar, TRUE), 'warning');
+        }
     }
-    if (function_exists('dvr')) {
-      dvr($debugvar, NULL, $func);
-    }
-    else {
-      drupal_set_message('[iframe(' . $level . ')] ' . $func . ' ' . print_r($debugvar, TRUE), 'warning');
-      #error_log('[iframe(' . $level . ')] ' . $func . ' ' . print_r($debugvar, TRUE));
-    }
-  }
 }
 
 
@@ -317,6 +317,10 @@ function iframe_field_formatter_info() {
       'label' => t('A link with the uri as title'),
       'field types' => array('iframe'),
     ),
+    'iframe_formatter_hidden' => array(
+      'label' => t('hidden - not shown (migration only)'),
+      'field types' => array('iframe'),
+    ),
   );
 }
 
@@ -358,6 +362,11 @@ function iframe_field_formatter_view($object_type, $object, $field, $instance, $
   elseif ($display['type']=='iframe_formatter_asurlwithuri') {
     foreach ($items as $delta => $item) {
       $element[$delta]['#markup'] = '<p>' . iframe_formatter_asurlwithuri_helper($item, $delta) . '</p>';
+    }
+  }
+  elseif ($display['type']=='iframe_formatter_hidden') {
+    foreach ($items as $delta => $item) {
+      $element[$delta]['#markup'] = '';
     }
   }
   return $element;
@@ -416,7 +425,14 @@ function iframe_formatter_asurlwithuri_helper($item) {
   return l($linktext, $item['url'], $item);
 }
 
-/*
+/**
+ * Formatter function for 'hidden' text field formatter.
+ */
+function iframe_formatter_hidden_helper($item) {
+  return '';
+}
+
+ /*
  * like central function
  * form the iframe code
  */
@@ -736,5 +752,9 @@ function iframe_validate_url($element, &$form_state) {
  */
 function iframe_init() {
   drupal_add_js(drupal_get_path('module', 'iframe') .'/iframe.js');
+}
+
+if (!function_exists('iframe_content_migrate_field_alter')) {
+    include_once(drupal_get_path('module', 'iframe') . "/iframe.content_migrate.iframe.inc");
 }
 
