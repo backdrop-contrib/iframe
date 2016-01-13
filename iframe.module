@@ -14,7 +14,7 @@ define('iframe_FRONT', 'front');
 define('iframe_EMAIL', 'email');
 define('iframe_DOMAINS', 'aero|arpa|biz|com|cat|coop|edu|gov|info|int|jobs|mil|museum|name|nato|net|org|pro|travel|mobi|local');
 
-define('DEBUG_LEVEL', 1);
+define('DEBUG_LEVEL', 0);
 if (!defined('DEBUG_LEVEL')) {
   define('DEBUG_LEVEL', 4);
 }
