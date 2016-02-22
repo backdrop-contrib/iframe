@@ -78,22 +78,22 @@ function iframe_content_migrate_instance_alter(&$instance_value, $field_value) {
           $instance_value['display'][$context]['type'] = 'iframe_formatter_only';
       }
     }
-  }
 
-  // Translate the original widgets.
-  $instance_value['widget']['type'] = 'iframe_widget_urlwidthheight';
+    // Translate the original widgets.
+    $instance_value['widget']['type'] = 'iframe_widget_urlwidthheight';
 
-  if (isset($instance_value['default_value'][0]) && is_array($instance_value['default_value'][0]['attributes'])) {
-    // settings are now a instance settings.
-    $settings =& $instance_value['default_value'][0];
-    foreach(array('class', 'width', 'height', 'frameborder', 'scrolling', 'transparency', 'tokensupport') as $attr) {
-      if (isset($settings['attributes'][$attr])) {
-        $field_value['settings'][$attr] = $settings['attributes'][$attr];
-        $default_attributes[$attr] = $settings['attributes'][$attr];
+    if (isset($instance_value['default_value'][0]) && is_array($instance_value['default_value'][0]['attributes'])) {
+      // settings are now a instance settings.
+      $settings =& $instance_value['default_value'][0];
+      foreach(array('class', 'width', 'height', 'frameborder', 'scrolling', 'transparency', 'tokensupport') as $attr) {
+        if (isset($settings['attributes'][$attr])) {
+          $field_value['settings'][$attr] = $settings['attributes'][$attr];
+          $default_attributes[$attr] = $settings['attributes'][$attr];
+        }
       }
-    }
-    unset($instance_value['default_value'][0]['attributes']);
-  } 
+      unset($instance_value['default_value'][0]['attributes']);
+    } 
+  }
 }
 
 
