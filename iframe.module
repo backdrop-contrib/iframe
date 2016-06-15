@@ -761,6 +761,8 @@ function iframe_init() {
 }
 
 if (!function_exists('iframe_content_migrate_field_alter')) {
-    include_once(drupal_get_path('module', 'iframe') . "/iframe.content_migrate.iframe.inc");
+    if (function_exists('module_load_include')) {
+        module_load_include('inc', 'iframe', 'iframe.content_migrate.iframe');
+    }
 }
 
