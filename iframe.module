@@ -346,22 +346,22 @@ function iframe_field_formatter_view($object_type, $object, $field, $instance, $
 
   if ($display['type']=='iframe_formatter_default') {
     foreach ($items as $delta => $item) {
-      $element[$delta]['#markup'] = '<p>' . iframe_formatter_default_helper($item, $delta) . '</p>';
+      $element[$delta]['#markup'] = iframe_formatter_default_helper($item, $delta);
     }
   }
   elseif ($display['type']=='iframe_formatter_only') {
     foreach ($items as $delta => $item) {
-      $element[$delta]['#markup'] = '<p>' . iframe_formatter_only_helper($item, $delta) . '</p>';
+      $element[$delta]['#markup'] = iframe_formatter_only_helper($item, $delta);
     }
   }
   elseif ($display['type']=='iframe_formatter_asurl') {
     foreach ($items as $delta => $item) {
-      $element[$delta]['#markup'] = '<p>' . iframe_formatter_asurl_helper($item, $delta) . '</p>';
+      $element[$delta]['#markup'] = iframe_formatter_asurl_helper($item, $delta);
     }
   }
   elseif ($display['type']=='iframe_formatter_asurlwithuri') {
     foreach ($items as $delta => $item) {
-      $element[$delta]['#markup'] = '<p>' . iframe_formatter_asurlwithuri_helper($item, $delta) . '</p>';
+      $element[$delta]['#markup'] = iframe_formatter_asurlwithuri_helper($item, $delta);
     }
   }
   elseif ($display['type']=='iframe_formatter_hidden') {
@@ -502,11 +502,18 @@ function iframe_iframe($text, $path, $options = FALSE) {
     }
   }
 
+  $iframearguments_allowed = array('title', 'width', 'height', 'class', 'frameborder', 'scrolling', 'transparency');
+  $iframearguments = array();
+  foreach($iframearguments_allowed as $argkey) {
+    if (isset($options[$argkey])) {
+      $iframearguments[$argkey] = $options[$argkey];
+    }
+  }
   return 
     '<div class="' . (isset($options['class'])? check_plain($options['class']) : '') . '">'
       . (empty($text)? '' : '<h3 class="iframe_title">' . ($options['html'] ? $text : check_plain($text)) . '</h3>')
       . '<iframe src="' . check_url(url($path, $options)) . '"'
-        . drupal_attributes($options)
+        . drupal_attributes($iframearguments)
         . $htmlid
       . '>'
       . t('Your browser does not support iframes. But You can use the following link.') . ' ' . l('Link', url($path, $options), $options_link)
