@@ -163,7 +163,7 @@ function iframe_field_instance_settings_form($field, $instance) {
       '#type' => 'textfield',
       '#title' => t('width of an iframe'),
       '#default_value' => !empty($settings['width'])? $settings['width'] : (!empty($field_settings['width'])? $field_settings['width'] : ''),
-      '#description' => t('iframes need fix width and height, only numbers are allowed.'),
+      '#description' => t('iframes need fix width and height, only numbers are allowed, or percentage values. (e.g. 500px => "500", 80% => "80%")'),
       //'#disabled' => $has_data,
       '#maxlength' => 4,
       '#size' => 4,
@@ -172,7 +172,7 @@ function iframe_field_instance_settings_form($field, $instance) {
       '#type' => 'textfield',
       '#title' => t('height of an iframe'),
       '#default_value' => !empty($settings['height'])? $settings['height'] : (!empty($field_settings['height'])? $field_settings['height'] : ''),
-      '#description' => t('iframes need fix width and height, only numbers are allowed.'),
+      '#description' => t('iframes need fix width and height, only numbers are allowed, or percentage values. (e.g. 500px => "500", 80% => "80%")'),
       '#maxlength' => 4,
       '#size' => 4,
     );
