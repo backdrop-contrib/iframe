@@ -5,7 +5,7 @@ The Iframe module creates a custom field, which lets you add a complete iframe t
 * This is a port of the Drupal 7 module:
 https://www.drupal.org/project/iframe
 
-CONFIGURATION
+Configuration
 -------------
 
 1. Navigate to Administration > Structure > Content types > [Content to edit] > Manage fields.
@@ -28,7 +28,7 @@ This project is GPL v2 software. See the LICENSE.txt file in this directory for
 complete text.
 
 
-MAINTAINERS
+Maintainers
 -----------
 
 - Juan Olalla (https://github.com/juanolalla)
