@@ -1,12 +1,7 @@
+type = module
 name = Iframe
 description = Defines simple iframe field types.
-package = CCK
-version = 0.0.2
-core = 7.x
+package = Field
+backdrop = 1.x
 dependencies[] = field
-files[] = iframe.module
-files[] = iframe.install
-files[] = iframe.content_migrate.iframe.inc
-;files[] = iframe.test
-required = FALSE
-
+stylesheets[all][] = css/iframe.css

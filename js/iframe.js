@@ -1,7 +1,7 @@
 
 /* see Issue "autoresize" http://drupal.org/node/360549 */
 (function ($) {
-  Drupal.behaviors.iframeModule = {
+  Backdrop.behaviors.iframeModule = {
     attach: function(context, settings) {
       $('iframe.autoresize').each(function() {
         var offsetHeight = 20;
@@ -17,7 +17,7 @@
               contentheight = $(iframeDoc).find('body').height();
             } catch (e) {
               elem = $(iframe)[0];
-              msg = $('<p><small>(' + Drupal.t('IFrame URL is not from the same domain - autoresize not working.') + ')</small></p>');
+              msg = $('<p><small>(' + Backrop.t('IFrame URL is not from the same domain - autoresize not working.') + ')</small></p>');
               $(elem).after(msg);
               clearInterval(iframeWaitInterval);
             }
@@ -45,5 +45,3 @@
     }
   }
 })(jQuery);
-
-

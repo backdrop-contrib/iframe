@@ -1,43 +1,9 @@
-CONTENTS OF THIS FILE
----------------------
-
-* Introduction
-* Requirements
-* Recommended Modules
-* Installation
-* Configuration
-* Maintainers
-
-
-INTRODUCTION
-------------
-
+Iframe
+======
 The Iframe module creates a custom field, which lets you add a complete iframe to your content types; including Src-URL, setting width and height, optionally a title above, and optionally a target attribute.
 
-* For a full description of the module, visit this page:
+* This is a port of the Drupal 7 module:
 https://www.drupal.org/project/iframe
-
-* To submit bug reports and feature suggestions, or to track changes:
-https://www.drupal.org/project/issues/iframe
-
-
-REQUIREMENTS
-------------
-
-This module requires no other modules outside of Drupal core.
-
-
-RECOMMENDED MODULES
--------------------
-
-Token - https://www.drupal.org/project/token
-
-
-INSTALLATION
-------------
-
-Install the Iframe module as you would normally install a contributed Drupal module. Visit: https://www.drupal.org/docs/7/extending-drupal-7/installing-contributed-modules-find-import-enable-configure-drupal-7 for further information.
-
 
 CONFIGURATION
 -------------
@@ -55,8 +21,17 @@ Field Settings
 6. Transparency can be set to on or off to allow transparency per CSS in the outer iframe tag.
 7. Token support can be set to "no tokens allowed", "tokens only in title field", or "tokens for title and url field". Token module must be enabled for some of this functionality.
 
+License
+-------
+
+This project is GPL v2 software. See the LICENSE.txt file in this directory for
+complete text.
+
 
 MAINTAINERS
 -----------
 
-* neffets - https://www.drupal.org/u/neffets
+- Juan Olalla (https://github.com/juanolalla)
+
+Originally written for Drupal by
+- neffets - https://www.drupal.org/u/neffets

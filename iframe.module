@@ -2,10 +2,7 @@
 
 /**
  * @file
- * Defines an iframe field with all attributes
- *
- * Modul-programming
- *    see also http://de.slideshare.net/zugec/fields-in-core-how-to-create-a-custom-field
+ * Defines an iframe field with all attributes.
  */
 
 define('iframe_EXTERNAL', 'external');
@@ -29,23 +26,9 @@ function iframe_debug($level, $func = 'iframe', $debugvar = NULL) {
             kpr(array($debugtitle, $debugvar), NULL, $debugtitle);
         }
         else {
-            drupal_set_message($debugtitle . ' ' . print_r($debugvar, TRUE), 'warning');
+            backdrop_set_message($debugtitle . ' ' . print_r($debugvar, TRUE), 'warning');
         }
     }
-}
-
-
-/**
- * Implements hook_help().
- */
-function iframe_help($path, $arg) {
-  switch ($path) {
-    case 'admin/help#iframe':
-      $output = '';
-      $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('The IFrame module defines an iframe field type for the Field module. Further definable are attributes for styling the iframe, like: url, width, height, title, class, frameborder, scrolling and transparency. See the <a href="@field-help">Field module help page</a> for more information about fields.', array('@field-help' => url('admin/help/field'))) . '</p>';
-      return $output;
-  }
 }
 
 /***************************************************************
@@ -471,7 +454,7 @@ function iframe_iframe($text, $path, $options = FALSE) {
   }
 
   // Append active class.
-  if ($path == $_GET['q'] || ($path == '<front>' && drupal_is_front_page())) {
+  if ($path == $_GET['q'] || ($path == '<front>' && backdrop_is_front_page())) {
     if (isset($options['class'])) {
       $options['class'] .= ' active';
     }
@@ -509,11 +492,12 @@ function iframe_iframe($text, $path, $options = FALSE) {
       $iframearguments[$argkey] = $options[$argkey];
     }
   }
-  return 
+  backdrop_add_js(backdrop_get_path('module', 'iframe') .'/js/iframe.js');
+  return
     '<div class="' . (isset($options['class'])? check_plain($options['class']) : '') . '">'
       . (empty($text)? '' : '<h3 class="iframe_title">' . ($options['html'] ? $text : check_plain($text)) . '</h3>')
       . '<iframe src="' . check_url(url($path, $options)) . '"'
-        . drupal_attributes($iframearguments)
+        . backdrop_attributes($iframearguments)
         . $htmlid
       . '>'
       . t('Your browser does not support iframes. But You can use the following link.') . ' ' . l('Link', url($path, $options), $options_link)
@@ -559,24 +543,10 @@ function iframe_field_widget_info() {
  * Implements hook_field_widget_settings_form().
  */
 function iframe_DISABLED_field_widget_settings_form($field, $instance) {
-  $widget = $instance['widget'];
-  $settings = $widget['settings'];
-
   iframe_debug(1, 'iframe_field_widget_settings_form', array('field' => $field, 'instance' => $instance));
   $form = array();
-/*
-  $form['field_widget_settings_form'] = array(
-    '#type' => 'textfield',
-    '#title' => t('field_widget_settings_form'),
-    '#default_value' => $settings['width'],
-    '#required' => TRUE,
-    //'#element_validate' => array('element_validate_integer_positive'),
-  );
-*/
-
   return $form;
 }
-
 
 /**
  * Implements hook_field_widget_form().
@@ -701,28 +671,20 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
   // Display the list of available placeholders if token module is installed.
   $tokensupport = !empty($settings['tokensupport'])? (int)$settings['tokensupport'] : 0;
   if ($tokensupport > 0) {
-    if (module_exists('token')) {
-      $element['token_tree'] = array(
-        '#theme' => 'token_tree_link',
-        '#token_types' => array('node', 'user'),
-        '#weight' => 3,
-      );
-      $element['url']['#description'] = (!empty($element['url']['#description'])? $element['url']['#description']." " : "")
-          . t('Field does support tokens.');
-      $element['title']['#description'] .= (!empty($element['title']['#description'])? $element['title']['#description']." " : "")
-          . t('Field does support tokens.');
-    }
-    else {
-      $element['token_tree'] = array(
-        '#markup' => '<p>' . t('Enable the <a href="@drupal-token">Token module</a> to view the available token browser.', array('@drupal-token' => 'http://drupal.org/project/token')) . '</p>',
-      );
-    }
+    $element['token_tree'] = array(
+      '#theme' => 'token_tree_link',
+      '#token_types' => array('node', 'user'),
+      '#weight' => 3,
+    );
+    $element['url']['#description'] = (!empty($element['url']['#description'])? $element['url']['#description']." " : "")
+        . t('Field does support tokens.');
+    $element['title']['#description'] .= (!empty($element['title']['#description'])? $element['title']['#description']." " : "")
+        . t('Field does support tokens.');
   }
 
   iframe_debug(2, 'iframe_field_widget_form', array('settings' => $settings, 'instance-settings' => $instance['settings']));
   return $element;
 }
-
 
 /**
  * Implements hook_field_widget_error().
@@ -756,20 +718,3 @@ function iframe_validate_url($element, &$form_state) {
     }
   }
 }
-
-
-/**
- * Support for local-domain iframes and autoresize the height
- *
- * Implementation of hook_init().
- */
-function iframe_init() {
-  drupal_add_js(drupal_get_path('module', 'iframe') .'/iframe.js');
-}
-
-if (!function_exists('iframe_content_migrate_field_alter')) {
-    if (function_exists('module_load_include')) {
-        module_load_include('inc', 'iframe', 'iframe.content_migrate.iframe');
-    }
-}
-
