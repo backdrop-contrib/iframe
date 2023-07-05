@@ -144,18 +144,18 @@ function iframe_field_instance_settings_form($field, $instance) {
   if ($field['type'] == 'iframe') {
     $form['width'] = array(
       '#type' => 'textfield',
-      '#title' => t('width of an iframe'),
+      '#title' => t('Width of an iframe'),
       '#default_value' => !empty($settings['width'])? $settings['width'] : (!empty($field_settings['width'])? $field_settings['width'] : ''),
-      '#description' => t('iframes need fix width and height, only numbers are allowed, or percentage values. (e.g. 500px => "500", 80% => "80%")'),
+      '#description' => t('Only numbers or percentage values are allowed. (e.g. 500px => "500", 80% => "80%")'),
       //'#disabled' => $has_data,
       '#maxlength' => 4,
       '#size' => 4,
     );
     $form['height'] = array(
       '#type' => 'textfield',
-      '#title' => t('height of an iframe'),
+      '#title' => t('Height of an iframe'),
       '#default_value' => !empty($settings['height'])? $settings['height'] : (!empty($field_settings['height'])? $field_settings['height'] : ''),
-      '#description' => t('iframes need fix width and height, only numbers are allowed, or percentage values. (e.g. 500px => "500", 80% => "80%")'),
+      '#description' => t('Only numbers or percentage values are allowed. (e.g. 500px => "500", 80% => "80%")'),
       '#maxlength' => 4,
       '#size' => 4,
     );
@@ -587,8 +587,9 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
         );
       $element['width'] = array(
         '#type' => 'textfield',
-        '#title' => t('width'),
+        '#title' => t('Width'),
         '#default_value' => $fwidth,
+        '#description' => t('Only numbers or percentage values are allowed. (e.g. 500px => "500", 80% => "80%")'),
         '#size' => 4,
         '#maxlength' => 4,
         '#weight' => 4,
@@ -605,13 +606,13 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
         );
       $element['height'] = array(
         '#type' => 'textfield',
-        '#title' => t('height'),
+        '#title' => t('Height'),
         '#default_value' => $fheight,
+        '#description' => t('Only numbers or percentage values are allowed. (e.g. 500px => "500", 80% => "80%")'),
         '#size' => 4,
         '#maxlength' => 4,
         '#weight' => 5,
         '#delta' => $delta,
-        '#element_validate' => array('element_validate_integer_positive'),
       );
       // no "break" intentionally, fall through
 
@@ -662,7 +663,7 @@ function iframe_field_widget_form(&$form, &$form_state, $field, $instance, $lang
           '#default_value' => $fclass,
           '#description' => t('Multiple classes should be separated by spaces.<br />You can use a class "autoresize" if You want height-autoresizing for iframes of the same domain.'),
           '#size' => 80,
-          '#weight' => 5,
+          '#weight' => 6,
           '#delta' => $delta,
           #'#element_validate' => array('iframe_validate_additionalclass'),
         );
